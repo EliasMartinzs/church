@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0, 0%, 0%;
+    --card: 210, 10%, 85%;
+    --card-foreground: 0, 0%, 0%;
+    --popover: 210, 10%, 85%;
+    --popover-foreground: 0, 0%, 0%;
+    --primary: 24 9.8% 10%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --secondary: 210, 10%, 85%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 210, 10%, 85%;
+    --muted-foreground: 25 5.3% 44.7%;
+    --accent: 210, 10%, 85%;
+    --accent-foreground: 24 9.8% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 0, 0%, 0%;
+    --radius: 1rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 230, 10%, 11%;
+    --foreground: 0 0% 98%;
+    --card: 228, 6%, 15%;
+    --card-foreground: 0 0% 63.9%;
+    --popover: 228, 6%, 15%;
+    --popover-foreground: 0 0% 63.9%;
+    --primary: 214, 79.4%, 53.4%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 228, 6%, 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 228, 6%, 15%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 228, 6%, 15%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 69.9%;
+    --input: 0 0% 69.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  @font-face {
+    font-family: "Bebas";
+    src: url("../public/fonts/BebasNeue-Bold.woff2") format("woff2");
+  }
+
+  .background-site {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1920' height='600' preserveAspectRatio='none' viewBox='0 0 1920 600'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1161%26quot%3b)' fill='none'%3e%3cpath d='M 0%2c195 C 128%2c224.6 384%2c382 640%2c343 C 896%2c304 1024%2c4 1280%2c0 C 1536%2c-4 1792%2c258.4 1920%2c323L1920 600L0 600z' fill='rgba(37%2c 99%2c 235%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1161'%3e%3crect width='1920' height='600' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+  }
+
+  /* Para navegadores baseados no WebKit (Chrome, Safari) */
+  .hidden-scrollbar {
+    overflow: scroll; /* Habilita a rolagem */
+    -ms-overflow-style: none; /* Para o Internet Explorer e o Edge */
+    scrollbar-width: none; /* Para o Firefox */
+  }
+
+  .hidden-scrollbar::-webkit-scrollbar {
+    display: none; /* Oculta o scrollbar */
+  }
+}

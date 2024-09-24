@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  fullName    String?
+  photoUrl    String?
+  phone       String?
+  isCompleted Boolean   @default(false)
+  role        Role      @default(ADMIN)
+  birthDate   DateTime?
+  church      Church?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Secretary {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  fullName    String?
+  photoUrl    String?
+  phone       String?
+  isCompleted Boolean   @default(false)
+  role        Role      @default(SECRETARY)
+  birthDate   DateTime?
+  cell        Cell?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Member {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  fullName    String?
+  photoUrl    String?
+  phone       String?
+  isCompleted Boolean   @default(false)
+  role        Role      @default(MEMBER)
+  birthDate   DateTime?
+  church      Church?   @relation(fields: [churchId], references: [id])
+  churchId    String?
+  cell        Cell?     @relation(fields: [cellId], references: [id])
+  cellId      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Church {
+  id                String           @id @default(cuid())
+  name              String
+  address           String?
+  photoUrl          String?
+  description       String?
+  admin             Admin            @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  adminId           String           @unique
+  churchStatistics  ChurchStatistics @relation(fields: [churchStatiticsId], references: [id], onDelete: Cascade)
+  churchStatiticsId String           @unique
+  members           Member[]
+  cells             Cell[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+}
+
+model Cell {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  church      Church?    @relation(fields: [churchId], references: [id])
+  churchId    String?
+  secretary   Secretary? @relation(fields: [secretaryId], references: [id])
+  secretaryId String?    @unique
+  members     Member[]
+  meetings    Meeting[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Meeting {
+  id           String            @id @default(cuid())
+  title        String
+  description  String?
+  date         DateTime
+  startTime    DateTime
+  endTime      DateTime
+  location     String
+  host         String
+  cell         Cell?             @relation(fields: [cellId], references: [id])
+  cellId       String?
+  participants MeetingResponse[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model MeetingResponse {
+  id         String           @id @default(cuid())
+  memberId   String
+  attendance AttendanceStatus @default(NOT_ATTENDING)
+  meeting    Meeting          @relation(fields: [meetingId], references: [id])
+  meetingId  String
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+model ChurchStatistics {
+  id            String   @id @default(cuid())
+  totalMembers  Int      @default(0)
+  totalCells    Int      @default(0)
+  totalMeetings Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  church        Church?
+}
+
+enum Role {
+  ADMIN
+  SECRETARY
+  MEMBER
+}
+
+enum AttendanceStatus {
+  ATTENDING
+  NOT_ATTENDING
+  MAYBE
+}
