@@ -22,7 +22,9 @@ export default function LayoutAdmin({ children }: Props) {
         </div>
 
         {/* Main Content */}
-        <main className="ml-56 mt-24 flex-1 p-4">{children}</main>
+        <main className="ml-56 mt-24 flex-1 p-4 overflow-x-auto">
+          {children}
+        </main>
       </div>
 
       {/* Mobile Layout */}

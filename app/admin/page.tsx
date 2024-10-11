@@ -20,7 +20,7 @@ export default async function Admin() {
     ]);
 
   return (
-    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-4">
+    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
       <NotificationUser isCompleted={!admin?.isCompleted} />
 
       <h4 className="text-xl mb-4">

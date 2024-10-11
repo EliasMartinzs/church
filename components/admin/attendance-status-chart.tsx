@@ -52,7 +52,7 @@ export const AttendaceStatusChart = ({ data }: Props) => {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
+      <CardHeader className="items-center pb-0 text-center">
         <CardTitle>Gráfico de Participação em Reuniões</CardTitle>
         <CardDescription>Últimos dados de participação</CardDescription>
       </CardHeader>

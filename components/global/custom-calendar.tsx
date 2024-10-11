@@ -3,8 +3,11 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "../ui/button";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-// Definindo a interface para armazenar informações do dia
+import "swiper/css";
+import { cn, isBirthdayToday } from "@/lib/utils";
+
 interface DayInfo {
   date: Date;
   day: string;
@@ -13,7 +16,8 @@ interface DayInfo {
 export const CustomCalendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [daysInMonth, setDaysInMonth] = useState<DayInfo[]>([]);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [todayIndex, setTodayIndex] = useState<number>(0);
+  const swiperRef = useRef<any>(null);
 
   useEffect(() => {
     const getDaysInMonth = (year: number, month: number): DayInfo[] => {
@@ -29,8 +33,25 @@ export const CustomCalendar: React.FC = () => {
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    setDaysInMonth(getDaysInMonth(year, month));
+    const days = getDaysInMonth(year, month);
+    setDaysInMonth(days);
+
+    const today = new Date();
+    const todayIndex = days.findIndex(
+      (dayInfo) =>
+        dayInfo.date.getFullYear() === today.getFullYear() &&
+        dayInfo.date.getMonth() === today.getMonth() &&
+        dayInfo.date.getDate() === today.getDate()
+    );
+
+    setTodayIndex(todayIndex >= 0 ? todayIndex : 0);
   }, [currentDate]);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.slideTo(todayIndex);
+    }
+  }, [todayIndex]);
 
   const nextMonth = () => {
     setCurrentDate(
@@ -44,12 +65,6 @@ export const CustomCalendar: React.FC = () => {
     );
   };
 
-  const handleScroll = (event: React.WheelEvent) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft += event.deltaY; // Desloca horizontalmente conforme a rolagem do mouse
-    }
-  };
-
   return (
     <div className="space-y-4">
       <h4 className="text-lg font-semibold capitalize">
@@ -59,27 +74,53 @@ export const CustomCalendar: React.FC = () => {
         })}
       </h4>
 
-      <div
-        className="flex items-center gap-x-2 overflow-x-auto scroll-smooth"
-        onWheel={handleScroll} // Adiciona o evento de rolagem
-        ref={scrollRef} // Referência para o contêiner que será rolado
+      <Swiper
+        ref={swiperRef}
+        navigation={{
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        }}
+        slidesPerView={7}
+        spaceBetween={5}
+        breakpoints={{
+          640: {
+            slidesPerView: 5,
+          },
+          768: {
+            slidesPerView: 8,
+          },
+          1024: {
+            slidesPerView: 10,
+          },
+          1280: {
+            slidesPerView: 14,
+          },
+        }}
       >
         {daysInMonth.map((dayInfo) => (
-          <div
+          <SwiperSlide
             key={dayInfo.date.toISOString()}
-            className="bg-accent lg:bg-background p-4 flex flex-col items-center justify-center rounded-xl min-w-[100px] flex-shrink-0" // Adicione flex-shrink-0 para evitar que os cartões encolham
+            className={cn(
+              "bg-accent rounded-2xl p-2",
+              isBirthdayToday(dayInfo.date) &&
+                "bg-primary text-primary-foreground"
+            )}
           >
-            <span className="text-xl font-black">{dayInfo.date.getDate()}</span>
-            <span className="capitalize">{dayInfo.day.slice(0, 3)}</span>
-          </div>
+            <div className="p-1 flex flex-col gap-y-1 items-center justify-center">
+              <span className="text-xl font-black">
+                {dayInfo.date.getDate()}
+              </span>
+              <span className="capitalize">{dayInfo.day.slice(0, 3)}</span>
+            </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
 
       <div className="flex items-center justify-end gap-x-2 w-full">
-        <Button onClick={prevMonth}>
+        <Button className="swiper-button-prev" onClick={prevMonth}>
           <ChevronLeft className="size-6" />
         </Button>
-        <Button onClick={nextMonth}>
+        <Button className="swiper-button-next" onClick={nextMonth}>
           <ChevronRight className="size-6" />
         </Button>
       </div>
