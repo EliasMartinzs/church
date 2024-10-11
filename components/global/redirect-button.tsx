@@ -14,7 +14,7 @@ export const RedirectButton = ({ href, icon, name }: Props) => {
   return (
     <Link href={href}>
       <div className="hover:border rounded-3xl group transition-colors cursor-pointer">
-        <Card className="rounded-3xl">
+        <Card className="rounded-3xl lg:bg-background">
           <CardHeader>
             <CardTitle>
               <div className="flex items-center gap-x-4 text-muted-foreground">

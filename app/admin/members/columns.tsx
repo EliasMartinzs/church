@@ -2,26 +2,26 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Loader2, MoreHorizontal } from "lucide-react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteMember } from "@/actions/members";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ReusableDialog } from "@/components/global/reusable-dialog";
+import { useState, useTransition } from "react";
+import { deleteCell } from "@/actions/admin";
 
 export type Member = {
   id: string;
-  email: string;
-  name: string;
-  phone: string | null;
+  name: string | null;
+  memberEmail: string;
   cellName: string | undefined;
 };
 
@@ -30,6 +30,17 @@ export const columns: ColumnDef<Member>[] = [
     accessorKey: "actions",
     header: "Ações",
     cell: ({ row }) => {
+      const [open, setOpen] = useState(false);
+      const [isPending, startTransition] = useTransition();
+
+      const handleDelete = (cellId: string) => {
+        startTransition(async () => {
+          deleteCell(cellId);
+          setOpen(false);
+          window.location.reload();
+        });
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -38,25 +49,54 @@ export const columns: ColumnDef<Member>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="flex flex-col">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <form action={deleteMember}>
-                <input type="hidden" name="memberId" value={row.original.id} />
-                <Button type="submit" variant="ghost">
-                  Deletar Membro
+            <ReusableDialog
+              trigger={
+                <Button type="button" variant="ghost">
+                  Deletar membro
                 </Button>
-              </form>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link
-                href={`/admin/member/${row.original.id}`}
-                className={cn(buttonVariants({ variant: "ghost" }))}
-              >
-                Editar Membro
-              </Link>
-            </DropdownMenuItem>
+              }
+              open={open}
+              setOpen={setOpen}
+              textAlign="center"
+              headerStyle="flex flex-col gap-y-3"
+              title="Excluir Célula Permanentemente"
+              description="Atenção: Ao excluir esta célula, todas as informações relacionadas a ela, incluindo membros e reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
+              content={
+                <div className="flex gap-2">
+                  <Button
+                    size="full"
+                    variant="outline"
+                    onClick={() => setOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    size="full"
+                    type="button"
+                    className="flex gap-x-2"
+                    onClick={() => handleDelete(row.original.id)}
+                  >
+                    {isPending ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" /> Deletando...
+                      </>
+                    ) : (
+                      "Deletar"
+                    )}
+                  </Button>
+                </div>
+              }
+            />
+
+            <Link
+              href={`/admin/member/${row.original.id}`}
+              className={cn(buttonVariants({ variant: "ghost" }))}
+            >
+              Sobre o Membro
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -77,25 +117,13 @@ export const columns: ColumnDef<Member>[] = [
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "phone",
-    header: "Telefone",
-  },
-  {
     accessorKey: "cellName",
+    header: "Celula",
+  },
+  {
+    accessorKey: "memberEmail",
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Célula
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <Button variant="ghost">Email</Button>;
     },
   },
 ];

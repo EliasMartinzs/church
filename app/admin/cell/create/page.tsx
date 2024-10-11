@@ -1,33 +1,40 @@
-import { getSecretariesFromChurch } from "@/actions/church";
+import { getChurch } from "@/actions/admin";
 import { NewCellForm } from "@/components/admin/new-cell-form";
-import { DivWrapper } from "@/components/global/div-wrapper";
 import { Title } from "@/components/global/title";
 
 async function getData() {
-  try {
-    const data = await getSecretariesFromChurch();
+  const data = await getChurch();
 
-    if (!data) {
-      return { data: null, message: "Nenhum secretario criado até o momento" };
-    }
+  if (!data) {
+    return { data: null, message: "Nenhum secretario criado até o momento" };
+  }
 
-    return { data: data, message: null };
-  } catch (error) {}
+  const secretaries = data.secretaries
+    .filter((sec) => sec.cell === null)
+    .map((sec) => ({
+      id: sec.id,
+      name: sec.fullName,
+    }));
+
+  return {
+    churchId: data.id,
+    secretaries: secretaries,
+  };
 }
 
 export default async function CreateCell() {
   const data = await getData();
 
   return (
-    <DivWrapper>
+    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
       <Title href="/admin/cells" text="Nova célula" />
 
       <div className="w-full">
         <NewCellForm
-          churchId={data?.data?.churchId as string}
-          secretaries={data?.data?.secretaries!}
+          churchId={data.churchId as string}
+          secretaries={data.secretaries!}
         />
       </div>
-    </DivWrapper>
+    </div>
   );
 }

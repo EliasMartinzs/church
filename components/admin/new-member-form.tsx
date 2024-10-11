@@ -1,64 +1,65 @@
 "use client";
 
-import {
-  createNewMemberForm,
-  CreateNewMemberValidation,
-} from "@/lib/validations";
+import { createNewUserForm, createNewUserValidation } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Cells } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import { ReusableSelect } from "../global/reusable-select";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import Link from "next/link";
-import { createUser } from "@/actions/users";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { createNewUser } from "@/actions/admin";
+import { revalidatePath } from "next/cache";
+import { Cell } from "@prisma/client";
+import { ReusableSelect } from "../global/reusable-select";
+import { sendEmail } from "@/hooks/use-email";
 
 type Props = {
-  cells: Cells[];
-  churchId: string;
-  cellId: string;
+  cellId: string | undefined;
+  churchId: string | undefined;
+  cells: Cell[];
 };
 
-export const MemberForm = ({ cells, churchId, cellId }: Props) => {
-  const [showPassword, setShowPassword] = useState<"text" | "password">(
-    "password"
-  );
-
-  const form = useForm<CreateNewMemberValidation>({
-    resolver: zodResolver(createNewMemberForm),
+export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
+  const [showPassword, setShowPassword] = useState("password");
+  const form = useForm<createNewUserValidation>({
+    resolver: zodResolver(createNewUserForm),
     defaultValues: {
       email: "",
-      password: "",
-      confirmPassword: "",
-      role: "MEMBER",
-      cellId: cellId || "",
       fullname: "",
+      cellId: cellId === "undefined" ? undefined : cellId,
       churchId: churchId,
+      confirmPassword: "",
+      password: "",
+      role: "MEMBER",
     },
   });
 
-  const [isPeding, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const isLoading = isPending || form.formState.isLoading;
 
-  const isLoading = form.formState.isLoading || isPeding;
-
-  const onSubmit = async (values: CreateNewMemberValidation) => {
+  const onSubmit = async (values: createNewUserValidation) => {
     startTransition(async () => {
-      await createUser(values);
-      toast(`${values.fullname} criado(a) com sucesso!`);
+      await createNewUser(values);
       router.push("/admin/members");
+      toast("Novo membro cadastrado com sucesso!");
+      revalidatePath("/admin/members");
+    });
+
+    sendEmail({
+      email: values.email as string,
+      password: values.password as string,
+      from_name: values.fullname as string,
     });
   };
 
-  const dataCells: { value: string; label: string }[] = cells?.map((cell) => ({
-    value: cell.id,
+  const data = cells?.map((cell) => ({
     label: cell.name,
+    value: cell.id,
   }));
 
   return (
@@ -161,24 +162,11 @@ export const MemberForm = ({ cells, churchId, cellId }: Props) => {
                 <FormLabel>Célula</FormLabel>
                 <FormControl>
                   <ReusableSelect
+                    data={data}
+                    erroMessage="Nenhuma célula criada até o momento!"
+                    field={field.value as string}
                     onChange={field.onChange}
-                    field={field.value}
-                    placeholder="Celula do usuario"
-                    data={dataCells}
-                    className="w-full"
-                    erroMessage={
-                      <div className="w-full flex flex-col gap-2">
-                        <p className="text-center py-2">
-                          Nenhuma célula encontrada
-                        </p>
-                        <Link
-                          className={buttonVariants({ className: "" })}
-                          href="/admin/cells/create"
-                        >
-                          Criar uma nova célula
-                        </Link>
-                      </div>
-                    }
+                    placeholder="Seleciona a célula"
                   />
                 </FormControl>
                 <small>{form.formState.errors.cellId?.message}</small>
@@ -187,14 +175,14 @@ export const MemberForm = ({ cells, churchId, cellId }: Props) => {
           />
         )}
 
-        <Button className="w-full" size="lg">
+        <Button className="w-full" size="lg" type="submit">
           {isLoading ? (
             <div className="flex items-center gap-x-2">
               <Loader2 className="size-6 animate-spin" />
               Criando...
             </div>
           ) : (
-            "Salvar"
+            "Criar"
           )}
         </Button>
       </form>

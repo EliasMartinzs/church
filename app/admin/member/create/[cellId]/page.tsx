@@ -1,33 +1,26 @@
-import { getChurch } from "@/actions/church";
-import { MemberForm } from "@/components/admin/member-form";
-import { DivWrapper } from "@/components/global/div-wrapper";
+import { getChurch } from "@/actions/admin";
+import { NewMemberForm } from "@/components/admin/new-member-form";
 import { Title } from "@/components/global/title";
-
-async function getData() {
-  const church = await getChurch();
-
-  return church;
-}
+import React from "react";
 
 type Props = {
   params: { cellId: string };
 };
 
-export default async function MemberCreate({ params: { cellId } }: Props) {
-  const church = await getData();
-  const findedCell = church?.cells.find((c) => c.id === cellId);
+export default async function CreateMemberPage({ params: { cellId } }: Props) {
+  const church = await getChurch();
 
   return (
-    <DivWrapper>
-      <Title
-        text={`Novo Membro ${findedCell ? `para a ${findedCell.name}` : ""}`}
-      />
+    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
+      <Title href="/admin/members" text="Novo membro" />
 
-      <MemberForm
-        cells={church?.cells!}
-        churchId={church?.id as string}
-        cellId={cellId}
-      />
-    </DivWrapper>
+      <div className="w-full">
+        <NewMemberForm
+          cellId={cellId}
+          churchId={church?.id}
+          cells={church?.cells!}
+        />
+      </div>
+    </div>
   );
 }

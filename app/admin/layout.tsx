@@ -12,7 +12,7 @@ export default function LayoutAdmin({ children }: Props) {
       {/* Desktop Layout */}
       <div className="hidden lg:flex flex-1">
         {/* Topbar */}
-        <div className="w-full h-24 fixed top-0 left-0 z-10">
+        <div className="w-full h-24 fixed top-0 left-0 z-10 bg-background/90 backdrop-blur-sm">
           <TopbarDesktop />
         </div>
 

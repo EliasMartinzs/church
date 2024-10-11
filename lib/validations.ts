@@ -1,5 +1,12 @@
 import * as z from "zod";
 
+const MeetingStatusEnum = z.enum([
+  "PENDING",
+  "CONFIRMED",
+  "CANCELLED",
+  "COMPLETED",
+]);
+
 export const userProfileFormSchema = z.object({
   fullname: z.string().optional(),
   phone: z.string().optional(),
@@ -61,6 +68,29 @@ export const createNewCellFormSchema = z.object({
 
 export type CreateNewCellValidation = z.infer<typeof createNewCellFormSchema>;
 
+export const createNewSecretaryForm = z.object({
+  fullname: z.string().min(1, {
+    message: "Nome Completo é obrigatório",
+  }),
+  email: z.string().email({
+    message: "E-mail é obrigatório",
+  }),
+  password: z.string().min(6, {
+    message: "Senha é obrigatório",
+  }),
+  confirmPassword: z.string().min(6, {
+    message: "Confirmação de senha é obrigatória",
+  }),
+  role: z.string().min(1, {
+    message: "Selecione o Cargo do membro",
+  }),
+  churchId: z.string(),
+});
+
+export type CreateNewSecretaryValidation = z.infer<
+  typeof createNewSecretaryForm
+>;
+
 export const createNewUserForm = z
   .object({
     fullname: z.string().min(1, {
@@ -79,7 +109,9 @@ export const createNewUserForm = z
       message: "Selecione o Cargo do membro",
     }),
     churchId: z.string().optional(),
-    cellId: z.string().optional(),
+    cellId: z.string().min(1, {
+      message: "Por favor selecione a celula",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -87,3 +119,31 @@ export const createNewUserForm = z
   });
 
 export type createNewUserValidation = z.infer<typeof createNewUserForm>;
+
+export const createNewMeetingSchema = z.object({
+  title: z.string().min(6, {
+    message: "Insira o título do encontro",
+  }),
+  description: z.string().optional(),
+  date: z.date({
+    message: "Insira o dia do encontro",
+  }),
+  startTime: z.string({
+    message: "Insira o horário de ínicio do encontro",
+  }),
+  endTime: z.string({
+    message: "Inisira o horário de termino do encontro",
+  }),
+  location: z.string().min(6, {
+    message: "Insira o local de encontro",
+  }),
+  host: z.string().min(4, {
+    message: "Insira o nome do anfitrião do encontro",
+  }),
+  status: MeetingStatusEnum.default("PENDING"),
+  cellId: z.string().min(1, {
+    message: "Por favor selecione a celula",
+  }),
+});
+
+export type CreateNewMeetingValidation = z.infer<typeof createNewMeetingSchema>;

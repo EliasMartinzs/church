@@ -1,23 +1,22 @@
 import { TableMembers } from "@/components/admin/table-members";
-import { DivWrapper } from "@/components/global/div-wrapper";
 import { RedirectButton } from "@/components/global/redirect-button";
 import { Title } from "@/components/global/title";
-import { HiOutlineUserPlus } from "react-icons/hi2";
+import { LiaUser } from "react-icons/lia";
 
-export default function Members() {
+export default function MembersPage() {
   return (
-    <DivWrapper className="mt-5 ">
-      <Title text="Membros" />
+    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
+      <Title href="/admin" text="Home" />
 
       <div className="flex flex-col gap-3 lg:flex-row">
         <RedirectButton
-          icon={HiOutlineUserPlus}
+          icon={LiaUser}
           name="Novo membro"
           href="/admin/member/create/undefined"
         />
       </div>
 
       <TableMembers />
-    </DivWrapper>
+    </div>
   );
 }

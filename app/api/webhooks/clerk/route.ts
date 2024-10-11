@@ -73,7 +73,7 @@ export async function POST(req: Request) {
             },
           });
 
-          await prisma.church.create({
+          const church = await prisma.church.create({
             data: {
               adminId: admin.id,
               name: "Igreja",
@@ -81,35 +81,16 @@ export async function POST(req: Request) {
               photoUrl: "/church.png",
             },
           });
+
+          await clerkClient().users.updateUserMetadata(userId, {
+            privateMetadata: {
+              churchId: church.id,
+            },
+          });
         });
-      }
-
-      if (role === "SECRETARY") {
-      }
-
-      if (role === "MEMBER") {
-        const cellId = user?.privateMetadata.cellId as string;
-        const churchId = user?.privateMetadata.churchId as string;
       }
     } catch (error) {
       return new Response("Error creating user or profile", { status: 500 });
-    }
-  }
-
-  // if (eventType === "user.updated") {
-  // }
-
-  if (eventType === "user.deleted") {
-    const userId = evt.data.id;
-
-    try {
-      await prisma.admin.delete({
-        where: {
-          id: userId,
-        },
-      });
-    } catch (error) {
-      return new Response("Error deleting user or profile", { status: 500 });
     }
   }
 

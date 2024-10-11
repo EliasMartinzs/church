@@ -13,6 +13,7 @@ CREATE TABLE "Admin" (
     "phone" TEXT,
     "isCompleted" BOOLEAN NOT NULL DEFAULT false,
     "role" "Role" NOT NULL DEFAULT 'ADMIN',
+    "birthDate" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -29,6 +30,7 @@ CREATE TABLE "Secretary" (
     "isCompleted" BOOLEAN NOT NULL DEFAULT false,
     "role" "Role" NOT NULL DEFAULT 'SECRETARY',
     "birthDate" TIMESTAMP(3),
+    "churchId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -139,6 +141,9 @@ CREATE UNIQUE INDEX "Church_churchStatiticsId_key" ON "Church"("churchStatiticsI
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cell_secretaryId_key" ON "Cell"("secretaryId");
+
+-- AddForeignKey
+ALTER TABLE "Secretary" ADD CONSTRAINT "Secretary_churchId_fkey" FOREIGN KEY ("churchId") REFERENCES "Church"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Member" ADD CONSTRAINT "Member_churchId_fkey" FOREIGN KEY ("churchId") REFERENCES "Church"("id") ON DELETE SET NULL ON UPDATE CASCADE;

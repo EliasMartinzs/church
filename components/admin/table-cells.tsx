@@ -1,19 +1,23 @@
-import { getChurch } from "@/actions/church";
+import { getChurch } from "@/actions/admin";
 import { columns } from "@/app/admin/cells/columns";
 import { DataTable } from "@/app/admin/cells/data-table";
+import { notFound } from "next/navigation";
 
 async function getData() {
-  const church = await getChurch();
+  const data = await getChurch();
 
-  const data = church?.cells.map((c) => ({
-    id: c.id as string,
-    name: c.name as string,
-    photoUrl: c.photoUrl as string,
-    secretary: c.secretary?.profile?.fullName as string,
-    secretaryEmail: c.secretary?.email as string,
+  if (!data) {
+    return notFound();
+  }
+
+  const cells = data.cells.map((cell) => ({
+    id: cell.id,
+    name: cell.name,
+    secretary: cell.secretary?.fullName,
+    secretaryEmail: cell.secretary?.email,
   }));
 
-  return data;
+  return cells;
 }
 
 export const TableCells = async () => {

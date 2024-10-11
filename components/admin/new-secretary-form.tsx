@@ -1,6 +1,9 @@
 "use client";
 
-import { createNewUserForm, createNewUserValidation } from "@/lib/validations";
+import {
+  createNewSecretaryForm,
+  CreateNewSecretaryValidation,
+} from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -10,21 +13,24 @@ import { Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
-import { createUser } from "@/actions/users";
+
 import { useRouter } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { createNewSecretary } from "@/actions/admin";
+import { sendEmail } from "@/hooks/use-email";
 
 type Props = {
   churchId: string;
+  userId: string;
 };
 
-export const NewSecretaryForm = ({ churchId }: Props) => {
+export const NewSecretaryForm = ({ churchId, userId }: Props) => {
   const [showPassword, setShowPassword] = useState<"text" | "password">(
     "password"
   );
 
-  const form = useForm<createNewUserValidation>({
-    resolver: zodResolver(createNewUserForm),
+  const form = useForm<CreateNewSecretaryValidation>({
+    resolver: zodResolver(createNewSecretaryForm),
     defaultValues: {
       email: "",
       password: "",
@@ -39,12 +45,18 @@ export const NewSecretaryForm = ({ churchId }: Props) => {
   const router = useRouter();
   const isLoading = isPending || form.formState.isLoading;
 
-  const onSubmit = async (values: createNewUserValidation) => {
+  const onSubmit = async (values: CreateNewSecretaryValidation) => {
     startTransition(async () => {
-      createUser(values);
-      toast("Novo secretário cadastrado com sucesso!");
+      await createNewSecretary(values);
+      toast("Novo secretario cadastrado com sucesso!");
       router.push("/admin/cell/create");
-      revalidatePath("/admin/members");
+      revalidatePath("/admin/cells");
+    });
+
+    sendEmail({
+      email: values.email as string,
+      password: values.password as string,
+      from_name: values.fullname as string,
     });
   };
 

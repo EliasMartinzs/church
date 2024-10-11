@@ -30,9 +30,11 @@ model Secretary {
   isCompleted Boolean   @default(false)
   role        Role      @default(SECRETARY)
   birthDate   DateTime?
-  cell        Cell?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  cell        Cell?
+  church      Church?   @relation(fields: [churchId], references: [id])
+  churchId    String?
 }
 
 model Member {
@@ -46,7 +48,7 @@ model Member {
   birthDate   DateTime?
   church      Church?   @relation(fields: [churchId], references: [id])
   churchId    String?
-  cell        Cell?     @relation(fields: [cellId], references: [id])
+  cell        Cell?     @relation(fields: [cellId], references: [id], onDelete: Cascade)
   cellId      String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -64,6 +66,7 @@ model Church {
   churchStatiticsId String           @unique
   members           Member[]
   cells             Cell[]
+  secretaries       Secretary[]
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 }
@@ -72,11 +75,12 @@ model Cell {
   id          String     @id @default(cuid())
   name        String
   description String?
-  church      Church?    @relation(fields: [churchId], references: [id])
-  churchId    String?
-  secretary   Secretary? @relation(fields: [secretaryId], references: [id])
-  secretaryId String?    @unique
+  church      Church     @relation(fields: [churchId], references: [id])
+  churchId    String
+  photoUrl    String?
   members     Member[]
+  secretary   Secretary? @relation(fields: [secretaryId], references: [id], onDelete: Cascade)
+  secretaryId String?    @unique
   meetings    Meeting[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -87,11 +91,13 @@ model Meeting {
   title        String
   description  String?
   date         DateTime
-  startTime    DateTime
-  endTime      DateTime
+  startTime    String
+  endTime      String
   location     String
   host         String
-  cell         Cell?             @relation(fields: [cellId], references: [id])
+  status       MeetingStatus     @default(PENDING)
+  reminder     Int?
+  cell         Cell?             @relation(fields: [cellId], references: [id], onDelete: Cascade)
   cellId       String?
   participants MeetingResponse[]
   createdAt    DateTime          @default(now())
@@ -102,7 +108,7 @@ model MeetingResponse {
   id         String           @id @default(cuid())
   memberId   String
   attendance AttendanceStatus @default(NOT_ATTENDING)
-  meeting    Meeting          @relation(fields: [meetingId], references: [id])
+  meeting    Meeting          @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   meetingId  String
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
@@ -128,4 +134,11 @@ enum AttendanceStatus {
   ATTENDING
   NOT_ATTENDING
   MAYBE
+}
+
+enum MeetingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }

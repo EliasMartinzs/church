@@ -4,6 +4,7 @@ import { menuItemsAdmin } from "@/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SignOutButton } from "../global/sign-out-button";
 
 export const SidebarDesktop = () => {
   const pathname = usePathname();
@@ -28,6 +29,8 @@ export const SidebarDesktop = () => {
           </Link>
         );
       })}
+
+      <SignOutButton />
     </aside>
   );
 };
