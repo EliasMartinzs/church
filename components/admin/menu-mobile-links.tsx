@@ -1,19 +1,34 @@
-import { menuItemsAdmin } from "@/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaRegUserCircle } from "react-icons/fa";
+import * as FiIcons from "react-icons/fi";
+import * as PiIcons from "react-icons/pi";
 
 type Props = {
   setOpen: (prevState: boolean) => void;
+  menuItems: { iconName: string; path: string; label: string }[];
 };
 
-export const MenuMobileLinks = ({ setOpen }: Props) => {
+export const MenuMobileLinks = ({ setOpen, menuItems }: Props) => {
   const pathname = usePathname();
+
+  const iconGroups = {
+    Fi: FiIcons,
+    Pi: PiIcons,
+  };
+
+  const getIconComponent = (iconName: string) => {
+    const prefix = iconName.slice(0, 2);
+
+    const IconComponent = iconGroups[prefix]?.[iconName] || FaRegUserCircle;
+    return IconComponent;
+  };
 
   return (
     <div className="space-y-2">
-      {menuItemsAdmin.map(({ icon, path, label }) => {
-        const Icon = icon;
+      {menuItems.map(({ iconName, path, label }) => {
+        const Icon = getIconComponent(iconName);
         return (
           <Link
             key={path}

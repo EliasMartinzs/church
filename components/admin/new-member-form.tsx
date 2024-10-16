@@ -20,7 +20,7 @@ import { sendEmail } from "@/hooks/use-email";
 type Props = {
   cellId: string | undefined;
   churchId: string | undefined;
-  cells: Cell[];
+  cells?: Cell[];
 };
 
 export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
@@ -162,7 +162,7 @@ export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
                 <FormLabel>Célula</FormLabel>
                 <FormControl>
                   <ReusableSelect
-                    data={data}
+                    data={data!}
                     erroMessage="Nenhuma célula criada até o momento!"
                     field={field.value as string}
                     onChange={field.onChange}

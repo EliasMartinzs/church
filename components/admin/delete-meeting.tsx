@@ -19,9 +19,10 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   meetingId: string;
+  trigger: React.ReactNode;
 };
 
-export const DeleteMeeting = ({ meetingId }: Props) => {
+export const DeleteMeeting = ({ meetingId, trigger }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const handleDelete = () => {
@@ -34,9 +35,7 @@ export const DeleteMeeting = ({ meetingId }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="border w-full p-1 rounded-3xl text-foreground border-muted-foreground">
-        Deletar encontro
-      </AlertDialogTrigger>
+      {trigger}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

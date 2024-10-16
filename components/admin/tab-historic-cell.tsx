@@ -25,7 +25,7 @@ export const TabHistoricCell = ({ cellId }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isPending } = useQuery({
     queryKey: ["historic"],
     queryFn: async () => {
       const response = await getHistoricMeetings(cellId);
@@ -34,7 +34,11 @@ export const TabHistoricCell = ({ cellId }: Props) => {
   });
 
   if (isLoading) {
-    return <Skeleton className="lg:bg-background w-full h-10 mt-10" />;
+    return (
+      <div className="w-full grid place-items-center py-8">
+        <Loader2 className="size-7 animate-spin" />
+      </div>
+    );
   }
 
   const totalItems = data?.length;

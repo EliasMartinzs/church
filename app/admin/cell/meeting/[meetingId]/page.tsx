@@ -23,7 +23,7 @@ export default async function Meeting({ params: { meetingId } }: Props) {
   );
 
   if (!data) {
-    return NotFound();
+    return <NotFound>Tente novamente</NotFound>;
   }
 
   return (

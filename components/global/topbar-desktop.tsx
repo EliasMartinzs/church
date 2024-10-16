@@ -12,12 +12,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { CiSettings, CiUser } from "react-icons/ci";
 import { SignOutButton } from "@clerk/nextjs";
-import { getAdmin } from "@/actions/admin";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getSecretary } from "@/actions/secretary";
 
-export const TopbarDesktop = async () => {
-  const user = await getAdmin();
+type Props = {
+  hrefProfile: string;
+  photoUrl: string;
+  fullname: string;
+};
 
+export const TopbarDesktop = ({ hrefProfile, photoUrl, fullname }: Props) => {
   return (
     <header className="w-full h-full flex">
       <div className="grid place-items-center size-24">
@@ -38,12 +42,12 @@ export const TopbarDesktop = async () => {
             <PopoverTrigger>
               <Avatar>
                 <AvatarImage
-                  src={user?.photoUrl as string}
-                  alt={user?.fullName as string}
+                  src={photoUrl as string}
+                  alt={fullname as string}
                 />
                 <AvatarFallback>
-                  {user?.fullName?.charAt(0)}
-                  {user?.fullName?.charAt(1)}
+                  {fullname?.charAt(0)}
+                  {fullname?.charAt(1)}
                 </AvatarFallback>
               </Avatar>
             </PopoverTrigger>
@@ -53,7 +57,7 @@ export const TopbarDesktop = async () => {
                 className="w-full justify-start gap-x-4"
                 asChild
               >
-                <Link href="/admin/profile">
+                <Link href={hrefProfile}>
                   <CiUser className="size-6" /> Meu perfil
                 </Link>
               </Button>
@@ -76,8 +80,6 @@ export const TopbarDesktop = async () => {
               </SignOutButton>
             </PopoverContent>
           </Popover>
-
-          {/* <p className="text-muted-foreground">{user?.profile?.fullName}</p> */}
         </div>
       </div>
     </header>

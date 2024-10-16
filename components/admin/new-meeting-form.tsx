@@ -51,7 +51,7 @@ export const NewMeetingForm = ({ cellId }: Props) => {
       startTime: "",
       host: "",
       location: "",
-      status: "PENDING",
+      status: "CONFIRMED",
       cellId: cellId,
     },
   });
@@ -110,7 +110,7 @@ export const NewMeetingForm = ({ cellId }: Props) => {
                         {field.value ? (
                           format(field.value, "dd/MM/yyyy", { locale: ptBR })
                         ) : (
-                          <span>Escolha uma data</span>
+                          <span>Data</span>
                         )}
                       </Button>
                     </FormControl>
@@ -244,35 +244,6 @@ export const NewMeetingForm = ({ cellId }: Props) => {
               <FormLabel>Endereço</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Av. Brasilia 888" />
-              </FormControl>
-              <small>{form.formState.errors.host?.message}</small>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <ReusableSelect
-                  data={[
-                    {
-                      label: "Pendente",
-                      value: "PENDING",
-                    },
-                    {
-                      label: "Confirmado",
-                      value: "CONFIRMED",
-                    },
-                  ]}
-                  erroMessage=""
-                  field={field.value}
-                  onChange={field.onChange}
-                  placeholder="Status do encontro"
-                />
               </FormControl>
               <small>{form.formState.errors.host?.message}</small>
             </FormItem>

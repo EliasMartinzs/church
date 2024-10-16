@@ -10,7 +10,7 @@ import { GridLayoutChart } from "@/components/admin/grid-layout";
 import { CustomCalendar } from "@/components/global/custom-calendar";
 
 export default async function Admin() {
-  const [admin, members, membersPerMonth, membersPerDay, attendanceStatus] =
+  const [admin, members, membersPerMonth, meetingsPerDay, attendanceStatus] =
     await Promise.all([
       getAdmin(),
       getChurchStatistic(),
@@ -21,7 +21,11 @@ export default async function Admin() {
 
   return (
     <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
-      <NotificationUser isCompleted={!admin?.isCompleted} />
+      <NotificationUser
+        href="/admin/profile"
+        isCompleted={!admin?.isCompleted}
+        profile="admin"
+      />
 
       <h4 className="text-xl mb-4">
         <span className="font-medium">Bem vindo(a),</span> {admin?.fullName}
@@ -32,7 +36,7 @@ export default async function Admin() {
       <GridLayoutChart
         attendanceStatus={attendanceStatus}
         members={members}
-        membersPerDay={membersPerDay}
+        meetingsPerDay={meetingsPerDay}
         membersPerMonth={membersPerMonth}
       />
     </div>

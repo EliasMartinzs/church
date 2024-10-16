@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ptBR } from "@clerk/localizations";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/provider/theme-provider";
+import { QueryProvider } from "@/provider/query-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,9 +27,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-
-            <Toaster />
+            <QueryProvider>
+              {children}
+              <Toaster />
+            </QueryProvider>
           </ThemeProvider>
         </body>
       </html>

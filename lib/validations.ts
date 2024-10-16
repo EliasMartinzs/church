@@ -7,6 +7,25 @@ const MeetingStatusEnum = z.enum([
   "COMPLETED",
 ]);
 
+const PrayerStatusEnum = z.enum([
+  "PENDING",
+  "ANSWERED",
+  "IGNORED",
+  "IN_PROGRESS",
+]);
+
+const PrayerCategoryEnum = z.enum([
+  "HEALING",
+  "GUIDANCE",
+  "PROVISION",
+  "RELATIONSHIPS",
+  "SPIRITUAL_GROWTH",
+  "COMMUNITY",
+  "WORLD_PEACE",
+  "PERSONAL",
+  "THANKSGIVING",
+]);
+
 export const userProfileFormSchema = z.object({
   fullname: z.string().optional(),
   phone: z.string().optional(),
@@ -147,3 +166,18 @@ export const createNewMeetingSchema = z.object({
 });
 
 export type CreateNewMeetingValidation = z.infer<typeof createNewMeetingSchema>;
+
+export const prayerRequestForm = z.object({
+  title: z.string().min(1, {
+    message: "Por favor, Insira um titulo valido",
+  }),
+  description: z.string().optional(),
+  status: PrayerStatusEnum.default("PENDING"),
+  answeredAt: z.boolean().default(false),
+  category: PrayerCategoryEnum.default("COMMUNITY"),
+  memberId: z.string().min(1, {
+    message: "Por favor, Insira um membro valido",
+  }),
+});
+
+export type PrayerRequestValidation = z.infer<typeof prayerRequestForm>;

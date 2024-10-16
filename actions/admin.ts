@@ -13,7 +13,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 import { getStatus } from "@/lib/utils";
-import { sendEmail } from "@/hooks/use-email";
 
 export const getAdmin = async () => {
   const user = await currentUser();
@@ -32,23 +31,6 @@ export const getAdmin = async () => {
   });
 
   return data;
-};
-
-export const handleIsCompleted = async () => {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  await prisma.admin.update({
-    where: {
-      id: user?.id,
-    },
-    data: {
-      isCompleted: true,
-    },
-  });
 };
 
 export const updateProfilePhotoAdmin = async (photoUrl: string) => {

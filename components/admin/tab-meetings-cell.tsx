@@ -1,6 +1,9 @@
-import { getMeetingsGroupedByMonth } from "@/actions/meetings";
+import {
+  getAllMeetingsOrderedByDate,
+  getMeetingsGroupedByMonth,
+} from "@/actions/meetings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MeetingCard } from "./meeting-card";
+import { MeetingCard } from "../global/meeting-card";
 import { Calendar } from "lucide-react";
 import { RedirectButton } from "../global/redirect-button";
 import { CiCalendar } from "react-icons/ci";
@@ -41,7 +44,11 @@ export const TabMeetingsCell = async ({ cellId }: Props) => {
               >
                 <div className="text-4xl font-bold">{month}</div>
                 {meetings.map((meeting) => (
-                  <MeetingCard meeting={meeting} key={meeting.id} />
+                  <MeetingCard
+                    href="/admin/cell/meeting/"
+                    meeting={meeting}
+                    key={meeting.id}
+                  />
                 ))}
               </div>
             ))

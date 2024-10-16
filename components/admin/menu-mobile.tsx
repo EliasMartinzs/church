@@ -2,16 +2,17 @@
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { IoMenuOutline } from "react-icons/io5";
-import Image from "next/image";
+
 import { SignOutButton } from "../global/sign-out-button";
 import { MenuMobileLinks } from "./menu-mobile-links";
 import { useState } from "react";
 
 type Props = {
   userProfile: React.ReactNode;
+  menuItems: { iconName: string; path: string; label: string }[];
 };
 
-export const MenuMobile = ({ userProfile }: Props) => {
+export const MenuMobile = ({ userProfile, menuItems }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,7 +23,7 @@ export const MenuMobile = ({ userProfile }: Props) => {
       <SheetContent>
         <div className="h-full flex-1 flex flex-col py-20 gap-y-10 relative">
           {userProfile}
-          <MenuMobileLinks setOpen={setOpen} />
+          <MenuMobileLinks menuItems={menuItems} setOpen={setOpen} />
 
           <div className="absolute bottom-0">
             <SignOutButton />

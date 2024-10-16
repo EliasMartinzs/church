@@ -1,26 +1,28 @@
 "use client";
 
-import { handleIsCompleted } from "@/actions/admin";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { handleIsCompleted } from "@/actions/global";
 
 type Props = {
   isCompleted: boolean;
+  href: string;
+  profile: "admin" | "secretario" | "member";
 };
 
-export const NotificationUser = ({ isCompleted }: Props) => {
+export const NotificationUser = ({ isCompleted, href, profile }: Props) => {
   const [open, setOpen] = useState(isCompleted);
   const router = useRouter();
 
   const handleLater = async () => {
     setOpen(false);
-    handleIsCompleted();
+    handleIsCompleted(profile);
   };
 
   const goToProfile = async () => {
-    router.push("/admin/profile");
-    handleIsCompleted();
+    router.push(href);
+    handleIsCompleted(profile);
   };
 
   return (

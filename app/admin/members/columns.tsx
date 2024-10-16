@@ -16,7 +16,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ReusableDialog } from "@/components/global/reusable-dialog";
 import { useState, useTransition } from "react";
-import { deleteCell } from "@/actions/admin";
+import { deleteCell, deleteMember } from "@/actions/admin";
 
 export type Member = {
   id: string;
@@ -33,9 +33,9 @@ export const columns: ColumnDef<Member>[] = [
       const [open, setOpen] = useState(false);
       const [isPending, startTransition] = useTransition();
 
-      const handleDelete = (cellId: string) => {
+      const handleDelete = (memberId: string) => {
         startTransition(async () => {
-          deleteCell(cellId);
+          deleteMember(memberId);
           setOpen(false);
           window.location.reload();
         });
@@ -62,8 +62,8 @@ export const columns: ColumnDef<Member>[] = [
               setOpen={setOpen}
               textAlign="center"
               headerStyle="flex flex-col gap-y-3"
-              title="Excluir Célula Permanentemente"
-              description="Atenção: Ao excluir esta célula, todas as informações relacionadas a ela, incluindo membros e reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
+              title="Excluir Membro Permanentemente"
+              description="Atenção: Ao excluir este membro, todas as informações relacionadas a ele, incluindo reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
               content={
                 <div className="flex gap-2">
                   <Button

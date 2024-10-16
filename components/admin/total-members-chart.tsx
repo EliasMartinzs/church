@@ -32,7 +32,7 @@ const chartConfig = {
 
 export const TotalMembersChart = ({ data }: Props) => {
   const totalMembers = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + curr.members, 0);
+    return data.reduce((acc, curr) => acc + curr.members - 1, 0);
   }, [data]);
 
   return (
@@ -44,9 +44,6 @@ export const TotalMembersChart = ({ data }: Props) => {
       {data.length === 0 ? (
         <div className="w-full py-6 text-center text-muted-foreground font-medium flex flex-col items-center justify-center gap-y-4">
           <p>Nenhum membro criado até o momento</p>
-          <Link href="/admin/members" className={buttonVariants({})}>
-            Crie um agora
-          </Link>
         </div>
       ) : (
         <CardContent className="flex-1 pb-0">

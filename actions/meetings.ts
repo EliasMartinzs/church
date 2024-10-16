@@ -23,9 +23,6 @@ export const getAllMeetingsOrderedByDate = async (cellId: string) => {
       cell: {
         id: cellId,
       },
-      date: {
-        gte: new Date(),
-      },
     },
     include: {
       participants: true,
@@ -36,8 +33,41 @@ export const getAllMeetingsOrderedByDate = async (cellId: string) => {
   });
 };
 
+export const getAvailableMeetings = async (cellId: string) => {
+  const today = new Date();
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+
+  try {
+    const meetings = await prisma.meeting.findMany({
+      where: {
+        cellId: cellId,
+        date: {
+          gte: tomorrow,
+        },
+        status: {
+          not: "COMPLETED",
+        },
+      },
+      include: {
+        participants: true,
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+
+    return meetings;
+  } catch (error) {
+    console.error("Erro ao buscar os encontros disponíveis:", error);
+    throw error;
+  }
+};
+
 export const getMeetingsGroupedByMonth = async (cellId: string) => {
-  const meetings = await getAllMeetingsOrderedByDate(cellId);
+  const meetings = await getAvailableMeetings(cellId);
 
   const groupedMeetings: { [key: string]: MeetingWithParticipants[] } = {};
 
@@ -82,6 +112,42 @@ export const getMeetingById = async (meetingId: string) => {
   }
 };
 
+export const getTodayMeetings = async (cellId: string) => {
+  const today = new Date();
+
+  const startOfToday = new Date(today);
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const endOfToday = new Date(today);
+  endOfToday.setHours(23, 59, 59, 999);
+
+  try {
+    const meetings = await prisma.meeting.findMany({
+      where: {
+        cellId: cellId,
+        date: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+        status: {
+          not: "COMPLETED",
+        },
+      },
+      include: {
+        participants: true,
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+
+    return meetings;
+  } catch (error) {
+    console.error("Erro ao buscar os encontros de hoje:", error);
+    throw error;
+  }
+};
+
 export const getAllParticipantsConfirmedMeetingByIds = async (
   participants: MeetingResponse[]
 ) => {
@@ -111,9 +177,16 @@ export const getHistoricMeetings = async (cellId: string) => {
       cell: {
         id: cellId,
       },
-      date: {
-        lt: now,
-      },
+      OR: [
+        {
+          date: {
+            lt: now,
+          },
+        },
+        {
+          status: "COMPLETED",
+        },
+      ],
     },
     include: {
       participants: true,
@@ -217,5 +290,56 @@ export const deleteMeeting = async (meetingId: string) => {
     });
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const updateAttendanceRateForMember = async (memberId: string) => {
+  const member = await prisma.member.findUnique({
+    where: { id: memberId },
+    include: { cell: true },
+  });
+
+  const totalMeetings = await prisma.meeting.count({
+    where: {
+      cellId: member?.cellId,
+    },
+  });
+
+  const meetingsAttended = await prisma.meetingResponse.count({
+    where: {
+      memberId,
+      attendance: "ATTENDING",
+    },
+  });
+
+  const attendanceRate =
+    totalMeetings > 0 ? (meetingsAttended / totalMeetings) * 100 : 0;
+
+  await prisma.member.update({
+    where: {
+      id: memberId,
+    },
+    data: {
+      attendanceRate,
+    },
+  });
+
+  return attendanceRate;
+};
+
+export const finalizeMeeting = async (formData: FormData) => {
+  const meetingId = formData.get("meetingId") as string;
+
+  await prisma.meeting.update({
+    where: { id: meetingId },
+    data: { status: "COMPLETED" },
+  });
+
+  const meetingResponses = await prisma.meetingResponse.findMany({
+    where: { meetingId },
+  });
+
+  for (const response of meetingResponses) {
+    await updateAttendanceRateForMember(response.memberId);
   }
 };

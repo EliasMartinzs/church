@@ -11,7 +11,6 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaInstagram,
-  FaRegUserCircle,
 } from "react-icons/fa";
 import { SiGithub } from "react-icons/si";
 
@@ -23,8 +22,6 @@ import {
   FaChartBar,
   FaEye,
 } from "react-icons/fa";
-
-import { FiHome, FiUsers, FiLayers } from "react-icons/fi";
 
 interface CardInfo {
   title: string;
@@ -195,26 +192,58 @@ export const onboardingSteps: {
   },
 ] as const;
 
-export const menuItemsAdmin: { label: string; icon: IconType; path: string }[] =
-  [
-    {
-      label: "Home",
-      icon: FiHome,
-      path: "/admin",
-    },
-    {
-      label: "Células",
-      icon: FiLayers,
-      path: "/admin/cells",
-    },
-    {
-      label: "Membros",
-      icon: FiUsers,
-      path: "/admin/members",
-    },
-    {
-      label: "Meu Perfil",
-      icon: FaRegUserCircle,
-      path: "/admin/profile",
-    },
-  ] as const;
+export const menuItemsAdmin = [
+  {
+    label: "Home",
+    iconName: "FiHome",
+    path: "/admin",
+  },
+  {
+    label: "Células",
+    iconName: "FiLayers",
+    path: "/admin/cells",
+  },
+  {
+    label: "Membros",
+    iconName: "FiUsers",
+    path: "/admin/members",
+  },
+  {
+    label: "Orações",
+    iconName: "PiHandsPrayingFill",
+    path: "/admin/prayers",
+  },
+  {
+    label: "Meu Perfil",
+    iconName: "FaRegUserCircle",
+    path: "/admin/profile",
+  },
+];
+
+export const menuItemsSecretary = [
+  {
+    label: "Célula",
+    iconName: "FiHome",
+    path: "/secretario",
+  },
+  {
+    label: "Encontros",
+    iconName: "FiCalendar",
+    path: "/secretario/meetings",
+  },
+  {
+    label: "Membros",
+    iconName: "FiUsers",
+    path: "/secretario/members",
+  },
+  {
+    label: "Orações",
+    iconName: "PiHandsPrayingFill",
+    path: "/secretario/prayers",
+  },
+  {
+    label: "Meu Perfil",
+    iconName: "FaRegUserCircle",
+    path: "/secretario/profile",
+  },
+];

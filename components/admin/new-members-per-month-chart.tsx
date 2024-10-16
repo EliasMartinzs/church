@@ -47,9 +47,6 @@ export function NewMembersPerMonthChart({ data }: Props) {
       {data.length === 0 ? (
         <div className="w-full py-6 text-center text-muted-foreground font-medium flex flex-col items-center justify-center gap-y-4">
           <p>Nenhum membro criado até o momento</p>
-          <Link href="/admin/members" className={buttonVariants({})}>
-            Crie um agora
-          </Link>
         </div>
       ) : (
         <CardContent>

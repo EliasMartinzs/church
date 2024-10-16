@@ -93,7 +93,7 @@ export const CustomCalendar: React.FC = () => {
             slidesPerView: 10,
           },
           1280: {
-            slidesPerView: 14,
+            slidesPerView: 16,
           },
         }}
       >

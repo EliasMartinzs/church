@@ -36,12 +36,12 @@ export default async function MemberPage({ params: { id } }: Props) {
 
       <div className="w-full flex flex-col items-center justify-center lg:items-start gap-y-8">
         <div className="flex items-center justify-center flex-col gap-8 lg:flex-row lg:items-start">
-          <div className="w-72 h-72 relative">
+          <div className="w-72 h-72 relative rounded-lg">
             <Image
               src={member?.photoUrl ?? "/noAvatar.png"}
               alt={member?.fullName ?? ""}
               fill
-              className="w-72 h-72 object-cover"
+              className="w-72 h-72 object-cover rounded-lg"
             />
           </div>
 

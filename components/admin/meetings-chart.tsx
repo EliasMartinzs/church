@@ -112,7 +112,8 @@ export const MeetingsChart = ({ data }: Props) => {
                 tickMargin={8}
                 minTickGap={32}
                 tickFormatter={(value) => {
-                  const date = new Date(value);
+                  const [day, month, year] = value.split("/").map(Number);
+                  const date = new Date(year, month - 1, day);
                   return date.toLocaleDateString("pt-BR", {
                     month: "short",
                     day: "numeric",
@@ -131,7 +132,8 @@ export const MeetingsChart = ({ data }: Props) => {
                     className="w-[150px]"
                     nameKey="meetingsCount"
                     labelFormatter={(value) => {
-                      const date = new Date(value);
+                      const [day, month, year] = value.split("/").map(Number);
+                      const date = new Date(year, month - 1, day);
                       return date.toLocaleDateString("pt-BR", {
                         month: "short",
                         day: "numeric",

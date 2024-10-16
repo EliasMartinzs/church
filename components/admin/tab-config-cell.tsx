@@ -10,7 +10,7 @@ export const TabConfigCell = ({ cellId }: Props) => {
       <h4 className="text-xl font-semibold">Zona de perigo</h4>
 
       <div className="border border-red-500 rounded-xl p-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3">
           <div>
             <p className="font-semibold">Deletar essa célula</p>
             <p className="text-muted-foreground font-light">
@@ -19,7 +19,9 @@ export const TabConfigCell = ({ cellId }: Props) => {
             </p>
           </div>
 
-          <DeleteCell cellId={cellId} />
+          <div className="lg:w-40">
+            <DeleteCell cellId={cellId} />
+          </div>
         </div>
       </div>
     </div>

@@ -141,28 +141,6 @@ export const EditProfileForm = ({ user }: Props) => {
           )}
         />
 
-        {/* <FormField
-          control={form.control}
-          name="birthDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col justify-end">
-              <FormLabel>Telefone</FormLabel>
-              <FormControl>
-                <InputMask
-                  value={field.value}
-                  onChange={(e) => {
-                    field.onChange(e.target.value);
-                  }}
-                  placeholder={field?.value?.toString() || "15/06/2000"}
-                  mask="__/__/____"
-                  replacement="_"
-                  className="flex h-9 w-full bg-transparent border border-input rounded-2xl p-6 text-sm transition-colors file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        /> */}
-
         <SubmitButton
           isFormDirty={isFormDirty}
           isPending={isPending}

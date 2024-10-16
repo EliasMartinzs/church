@@ -1,13 +1,18 @@
 import { Church } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
-import { getAdmin } from "@/actions/admin";
 import { MenuMobile } from "../admin/menu-mobile";
 import { MenuProfile } from "@/components/global/menu-profile";
 
-export const Navbar = async () => {
-  const user = await getAdmin();
+type Props = {
+  href: string;
+  fullname: string;
+  photoUrl: string;
+  email: string;
+  menuItems: { iconName: string; path: string; label: string }[];
+};
 
+export const Navbar = ({ fullname, photoUrl, email, menuItems }: Props) => {
   return (
     <header className="w-full mt-2.5 mb-10">
       <nav className="max-lg:w-[90%] mx-auto lg:max-w-7xl bg-card backdrop-blur-md rounded-full py-4 px-8 flex items-center justify-between shadow-3xl">
@@ -23,11 +28,12 @@ export const Navbar = async () => {
           <ModeToggle />
           <div className="flex items-center lg:hidden">
             <MenuMobile
+              menuItems={menuItems}
               userProfile={
                 <MenuProfile
-                  fullname={user?.fullName as string}
-                  photoUrl={user?.photoUrl as string}
-                  email={user?.email as string}
+                  fullname={fullname as string}
+                  photoUrl={photoUrl as string}
+                  email={email as string}
                 />
               }
             />

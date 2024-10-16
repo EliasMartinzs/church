@@ -15,7 +15,7 @@ type Props = {
     updatedAt: Date;
   } | null;
   membersPerMonth: { month: string; newMembers: number }[];
-  membersPerDay: {
+  meetingsPerDay: {
     date: string;
     meetingsCount: number;
   }[];
@@ -29,7 +29,7 @@ type Props = {
 export const GridLayoutChart = ({
   attendanceStatus,
   members,
-  membersPerDay,
+  meetingsPerDay,
   membersPerMonth,
 }: Props) => {
   return (
@@ -49,7 +49,7 @@ export const GridLayoutChart = ({
         <AttendaceStatusChart data={attendanceStatus} />
       </div>
 
-      <MeetingsChart data={membersPerDay} />
+      <MeetingsChart data={meetingsPerDay} />
     </div>
   );
 };

@@ -38,20 +38,22 @@ model Secretary {
 }
 
 model Member {
-  id          String    @id @default(cuid())
-  email       String    @unique
-  fullName    String?
-  photoUrl    String?
-  phone       String?
-  isCompleted Boolean   @default(false)
-  role        Role      @default(MEMBER)
-  birthDate   DateTime?
-  church      Church?   @relation(fields: [churchId], references: [id])
-  churchId    String?
-  cell        Cell?     @relation(fields: [cellId], references: [id], onDelete: Cascade)
-  cellId      String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String          @id @default(cuid())
+  email          String          @unique
+  fullName       String?
+  photoUrl       String?
+  phone          String?
+  isCompleted    Boolean         @default(false)
+  role           Role            @default(MEMBER)
+  birthDate      DateTime?
+  attendanceRate Float           @default(0)
+  prayerRequest  PrayerRequest[]
+  church         Church?         @relation(fields: [churchId], references: [id])
+  churchId       String?
+  cell           Cell?           @relation(fields: [cellId], references: [id], onDelete: Cascade)
+  cellId         String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model Church {
@@ -141,4 +143,55 @@ enum MeetingStatus {
   CONFIRMED
   CANCELLED
   COMPLETED
+}
+
+model PrayerRequest {
+  id                   String                 @id @default(cuid())
+  title                String
+  description          String
+  status               PrayerStatus           @default(PENDING)
+  isAnswered           Boolean                @default(false)
+  answeredAt           DateTime
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  member               Member                 @relation(fields: [memberId], references: [id])
+  memberId             String
+  category             PrayerCategory
+  prayerRequestHistory PrayerRequestHistory[]
+}
+
+enum PrayerCategory {
+  HEALING // Oração por cura física, emocional ou espiritual
+  GUIDANCE // Oração por orientação em decisões e caminhos da vida
+  PROVISION // Oração por suprimento financeiro ou material
+  RELATIONSHIPS // Oração por relacionamentos saudáveis e reconciliações
+  SPIRITUAL_GROWTH // Oração por crescimento e fortalecimento espiritual
+  COMMUNITY // Oração pela comunidade ou igreja
+  WORLD_PEACE // Oração pela paz mundial e por questões sociais
+  PERSONAL // Oração por questões pessoais ou íntimas
+  THANKSGIVING // Agradecimentos a Deus por bênçãos recebidas
+}
+
+model PrayerRequestHistory {
+  id              String        @id @default(cuid())
+  prayerRequest   PrayerRequest @relation(fields: [prayerRequestId], references: [id])
+  prayerRequestId String
+  status          PrayerStatus
+  updatedAt       DateTime      @default(now())
+}
+
+model PrayerStatistics {
+  id            String   @id @default(cuid())
+  totalRequests Int      @default(0)
+  answered      Int      @default(0)
+  notAnswered   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum PrayerStatus {
+  PENDING
+  ANSWERED
+  IGNORED
+  IN_PROGRESS
 }
