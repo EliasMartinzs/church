@@ -19,8 +19,12 @@ import { prayerStatusOptions, prayerTypes } from "@/constants";
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { createNewPrayer } from "@/actions/global";
+import { toast } from "sonner";
 
 type Props = {
+  churchId: string;
+  redirect: string;
   members:
     | {
         value: string;
@@ -29,7 +33,7 @@ type Props = {
     | undefined;
 };
 
-export const NewPrayerForm = ({ members }: Props) => {
+export const NewPrayerForm = ({ members, churchId, redirect }: Props) => {
   const form = useForm<PrayerRequestValidation>({
     resolver: zodResolver(prayerRequestForm),
     defaultValues: {
@@ -39,13 +43,20 @@ export const NewPrayerForm = ({ members }: Props) => {
       category: "COMMUNITY",
       memberId: "",
       status: "PENDING",
+      churchId: churchId,
     },
   });
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  function onSubmit(data: PrayerRequestValidation) {}
+  function onSubmit(data: PrayerRequestValidation) {
+    startTransition(async () => {
+      createNewPrayer(data);
+      router.push(redirect);
+      toast("Oração criada com sucesso!");
+    });
+  }
 
   return (
     <Form {...form}>
@@ -87,74 +98,77 @@ export const NewPrayerForm = ({ members }: Props) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categoria</FormLabel>
-              <FormControl>
-                <ReusableSelect
-                  data={prayerTypes}
-                  erroMessage="Nenhuma categoria encontrada"
-                  field={field.value}
-                  onChange={field.onChange}
-                  placeholder="Categorias"
-                />
-              </FormControl>
-              <p className="text-sm text-muted-foreground">
-                Selecione a categoria que melhor descreve seu pedido de oração.
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <FormField
+            control={form.control}
+            name="memberId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Membro</FormLabel>
+                <FormControl>
+                  <ReusableSelect
+                    data={members!}
+                    erroMessage="Nenhum membro encontrado"
+                    field={field.value}
+                    onChange={field.onChange}
+                    placeholder="Membro"
+                  />
+                </FormControl>
+                <p className="text-sm text-muted-foreground">
+                  Escolha o membro da igreja pelo qual será feita a oração.
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="memberId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Membro</FormLabel>
-              <FormControl>
-                <ReusableSelect
-                  data={members!}
-                  erroMessage="Nenhum membro encontrado"
-                  field={field.value}
-                  onChange={field.onChange}
-                  placeholder="Membro"
-                />
-              </FormControl>
-              <p className="text-sm text-muted-foreground">
-                Escolha o membro da igreja pelo qual será feita a oração.
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoria</FormLabel>
+                <FormControl>
+                  <ReusableSelect
+                    data={prayerTypes}
+                    erroMessage="Nenhuma categoria encontrada"
+                    field={field.value}
+                    onChange={field.onChange}
+                    placeholder="Categorias"
+                  />
+                </FormControl>
+                <p className="text-sm text-muted-foreground">
+                  Selecione a categoria que melhor descreve seu pedido de
+                  oração.
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Membro</FormLabel>
-              <FormControl>
-                <ReusableSelect
-                  data={prayerStatusOptions}
-                  erroMessage="Nenhum status encontrado"
-                  field={field.value}
-                  onChange={field.onChange}
-                  placeholder="Status"
-                />
-              </FormControl>
-              <p className="text-sm text-muted-foreground">
-                Escolha o status da oração.
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <ReusableSelect
+                    data={prayerStatusOptions}
+                    erroMessage="Nenhum status encontrado"
+                    field={field.value}
+                    onChange={field.onChange}
+                    placeholder="Status"
+                  />
+                </FormControl>
+                <p className="text-sm text-muted-foreground">
+                  Escolha o status da oração.
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <Button
           className="w-full p-5"

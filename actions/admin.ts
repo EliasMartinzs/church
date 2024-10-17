@@ -253,6 +253,7 @@ export const createNewUser = async (values: createNewUserValidation) => {
         role: "MEMBER",
         churchId: values.churchId,
         cellId: values.cellId,
+        photoUrl: "/noAvatar.png",
       },
     });
 

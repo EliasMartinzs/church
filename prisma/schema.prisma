@@ -74,18 +74,19 @@ model Church {
 }
 
 model Cell {
-  id          String     @id @default(cuid())
-  name        String
-  description String?
-  church      Church     @relation(fields: [churchId], references: [id])
-  churchId    String
-  photoUrl    String?
-  members     Member[]
-  secretary   Secretary? @relation(fields: [secretaryId], references: [id], onDelete: Cascade)
-  secretaryId String?    @unique
-  meetings    Meeting[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id             String          @id @default(cuid())
+  name           String
+  description    String?
+  church         Church          @relation(fields: [churchId], references: [id])
+  churchId       String
+  photoUrl       String?
+  members        Member[]
+  prayerRequests PrayerRequest[]
+  secretary      Secretary?      @relation(fields: [secretaryId], references: [id], onDelete: Cascade)
+  secretaryId    String?         @unique
+  meetings       Meeting[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model Meeting {
@@ -146,18 +147,20 @@ enum MeetingStatus {
 }
 
 model PrayerRequest {
-  id                   String                 @id @default(cuid())
-  title                String
-  description          String
-  status               PrayerStatus           @default(PENDING)
-  isAnswered           Boolean                @default(false)
-  answeredAt           DateTime
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
-  member               Member                 @relation(fields: [memberId], references: [id])
-  memberId             String
-  category             PrayerCategory
-  prayerRequestHistory PrayerRequestHistory[]
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  status      PrayerStatus   @default(PENDING)
+  isAnswered  Boolean        @default(false)
+  answeredAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  member      Member         @relation(fields: [memberId], references: [id])
+  memberId    String
+  category    PrayerCategory
+  cell        Cell?          @relation(fields: [cellId], references: [id])
+  cellId      String?
+  churchId    String
 }
 
 enum PrayerCategory {
@@ -172,19 +175,12 @@ enum PrayerCategory {
   THANKSGIVING // Agradecimentos a Deus por bênçãos recebidas
 }
 
-model PrayerRequestHistory {
-  id              String        @id @default(cuid())
-  prayerRequest   PrayerRequest @relation(fields: [prayerRequestId], references: [id])
-  prayerRequestId String
-  status          PrayerStatus
-  updatedAt       DateTime      @default(now())
-}
-
 model PrayerStatistics {
   id            String   @id @default(cuid())
   totalRequests Int      @default(0)
   answered      Int      @default(0)
   notAnswered   Int      @default(0)
+  churchId      String   @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

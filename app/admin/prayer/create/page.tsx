@@ -10,18 +10,25 @@ async function getData() {
     label: member.fullName!,
   }));
 
-  return members;
+  return {
+    members,
+    churchId: church?.id,
+  };
 }
 
 export default async function PayerCreatePage() {
-  const data = await getData();
+  const { members, churchId } = await getData();
 
   return (
     <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
       <Title href="/admin/prayers" text="Oracoes" />
 
       <div className="w-full">
-        <NewPrayerForm members={data} />
+        <NewPrayerForm
+          members={members}
+          redirect="/admin/prayers"
+          churchId={churchId!}
+        />
       </div>
     </div>
   );

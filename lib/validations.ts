@@ -178,6 +178,7 @@ export const prayerRequestForm = z.object({
   memberId: z.string().min(1, {
     message: "Por favor, Insira um membro valido",
   }),
+  churchId: z.string(),
 });
 
 export type PrayerRequestValidation = z.infer<typeof prayerRequestForm>;

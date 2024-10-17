@@ -156,7 +156,7 @@ export const NewCellForm = ({ churchId, secretaries }: Props) => {
                   erroMessage={
                     <Link
                       className={buttonVariants({ variant: "ghost" })}
-                      href="/admin/cell/secretary"
+                      href="/admin/cell/create-secretary"
                     >
                       Criar novo secretario
                     </Link>
