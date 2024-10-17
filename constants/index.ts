@@ -247,3 +247,22 @@ export const menuItemsSecretary = [
     path: "/secretario/profile",
   },
 ];
+
+export const prayerTypes = [
+  { label: "Cura", value: "HEALING" },
+  { label: "Orientação", value: "GUIDANCE" },
+  { label: "Suprimento", value: "PROVISION" },
+  { label: "Relacionamentos", value: "RELATIONSHIPS" },
+  { label: "Crescimento Espiritual", value: "SPIRITUAL_GROWTH" },
+  { label: "Comunidade", value: "COMMUNITY" },
+  { label: "Paz Mundial", value: "WORLD_PEACE" },
+  { label: "Pessoal", value: "PERSONAL" },
+  { label: "Agradecimento", value: "THANKSGIVING" },
+];
+
+export const prayerStatusOptions = [
+  { label: "Pendente", value: "PENDING" },
+  { label: "Respondida", value: "ANSWERED" },
+  { label: "Ignorada", value: "IGNORED" },
+  { label: "Em Progresso", value: "IN_PROGRESS" },
+];

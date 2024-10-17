@@ -1,5 +1,6 @@
 "use server";
 import prisma from "@/lib/db";
+import { PrayerRequestValidation } from "@/lib/validations";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -62,4 +63,9 @@ export const getCellMembersWithAttendanceRate = async (cellId: string) => {
   });
 
   return membersWithAttendanceRate;
+};
+
+export const createNewPrayer = async (data: PrayerRequestValidation) => {
+  try {
+  } catch (error: any) {}
 };
