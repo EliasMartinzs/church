@@ -81,3 +81,45 @@ export const updateProfilePic = async (photoUrl: string) => {
     throw new Error(error);
   }
 };
+
+export const getAllPrayerRequestsByCell = async () => {
+  const user = await getSecretary();
+
+  if (!user) {
+    redirect("sign-in");
+  }
+
+  try {
+    const data = await prisma.prayerRequest.findMany({
+      where: {
+        cellId: user?.cell?.id,
+      },
+      include: {
+        cell: true,
+        member: true,
+      },
+      orderBy: {
+        title: "asc",
+      },
+    });
+
+    const groupedData = data.reduce((acc, prayerRequest) => {
+      const status = prayerRequest.status;
+
+      if (!acc[status]) {
+        acc[status] = [];
+      }
+      acc[status].push(prayerRequest);
+      return acc;
+    }, {});
+
+    return {
+      all: data,
+      inProgress: groupedData["IN_PROGRESS"] || [],
+      pending: groupedData["PENDING"] || [],
+      answered: groupedData["ANSWERED"] || [],
+    };
+  } catch (error: any) {
+    throw new Error(`Failed to fetch prayer requests: ${error.message}`);
+  }
+};

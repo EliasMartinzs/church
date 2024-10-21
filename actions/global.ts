@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Cell, Member, PrayerRequest } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getSecretary } from "./secretary";
 
 export const handleIsCompleted = async (
   profile: "admin" | "secretario" | "member"
