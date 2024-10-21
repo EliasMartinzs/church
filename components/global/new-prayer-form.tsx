@@ -59,8 +59,6 @@ export const NewPrayerForm = ({
     },
   });
 
-  console.log(cellId);
-
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 

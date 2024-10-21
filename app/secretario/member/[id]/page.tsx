@@ -100,7 +100,7 @@ export default async function MemberPage({ params: { id } }: Props) {
             </div>
           </div>
 
-          <DeleteMember memberId={member?.id as string} />
+          <DeleteMember memberId={member?.id as string} role={member.role} />
         </div>
       </div>
     </div>
