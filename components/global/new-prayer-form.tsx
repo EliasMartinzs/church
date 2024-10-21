@@ -25,13 +25,17 @@ import { toast } from "sonner";
 type Props = {
   churchId: string;
   redirect: string;
-  cellId: string;
+  cellId?: string;
   members:
     | {
         value: string;
         label: string;
       }[]
     | undefined;
+  cells?: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export const NewPrayerForm = ({
@@ -39,6 +43,7 @@ export const NewPrayerForm = ({
   churchId,
   redirect,
   cellId,
+  cells,
 }: Props) => {
   const form = useForm<PrayerRequestValidation>({
     resolver: zodResolver(prayerRequestForm),
@@ -53,6 +58,8 @@ export const NewPrayerForm = ({
       cellId: cellId,
     },
   });
+
+  console.log(cellId);
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -176,6 +183,32 @@ export const NewPrayerForm = ({
             )}
           />
         </div>
+
+        {cellId === undefined && (
+          <FormField
+            control={form.control}
+            name="cellId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Celula</FormLabel>
+                <FormControl>
+                  <ReusableSelect
+                    data={cells!}
+                    erroMessage="Nenhuma celula encontrada"
+                    field={field.value}
+                    onChange={field.onChange}
+                    placeholder="Celula"
+                  />
+                </FormControl>
+                <p className="text-sm text-muted-foreground">
+                  Selecione a categoria que melhor descreve seu pedido de
+                  oração.
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <Button
           className="w-full p-5"

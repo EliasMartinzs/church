@@ -9,6 +9,7 @@ import { cn, isBirthdayToday } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 import { RedirectButton } from "../global/redirect-button";
 import { LiaUser } from "react-icons/lia";
+import Link from "next/link";
 
 type Props = {
   members: Member[];
@@ -119,7 +120,8 @@ const MemberCard = ({
   const displayName = name || "Nome não disponível";
 
   return (
-    <div
+    <Link
+      href={`/admin/member/${id}`}
       key={id}
       className={cn(
         "flex items-center gap-3 p-2 bg-accent lg:bg-background rounded-3xl shadow-3xl hover:bg-accent/90 transition-colors cursor-pointer relative"
@@ -142,6 +144,6 @@ const MemberCard = ({
           <Cake className="size-6" />
         </div>
       )}
-    </div>
+    </Link>
   );
 };

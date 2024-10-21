@@ -80,7 +80,7 @@ export default async function PrayersPage() {
           >
             {inProgress.length === 0 ? (
               <div className="w-full text-center text-muted-foreground text-xl">
-                Nenhuma oração criada até o momento!
+                Nenhuma oração em progresso até o momento!
               </div>
             ) : (
               inProgress.map((prayer, index) => (
@@ -103,7 +103,7 @@ export default async function PrayersPage() {
           >
             {pending.length === 0 ? (
               <div className="w-full text-center text-muted-foreground text-xl">
-                Nenhuma oração criada até o momento!
+                Nenhuma oração pendente até o momento!
               </div>
             ) : (
               pending.map((prayer, index) => (
@@ -126,7 +126,7 @@ export default async function PrayersPage() {
           >
             {answered.length === 0 ? (
               <div className="w-full text-center text-muted-foreground text-xl">
-                Nenhuma oração criada até o momento!
+                Nenhuma oração respondida até o momento!
               </div>
             ) : (
               answered.map((prayer, index) => (

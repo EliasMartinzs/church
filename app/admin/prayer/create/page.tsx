@@ -10,14 +10,20 @@ async function getData() {
     label: member.fullName!,
   }));
 
+  const cells = church?.cells.map((c) => ({
+    value: c.id,
+    label: c.name,
+  }));
+
   return {
     members,
     churchId: church?.id,
+    cells: cells,
   };
 }
 
 export default async function PayerCreatePage() {
-  const { members, churchId } = await getData();
+  const { members, churchId, cells } = await getData();
 
   return (
     <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
@@ -28,6 +34,7 @@ export default async function PayerCreatePage() {
           members={members}
           redirect="/admin/prayers"
           churchId={churchId!}
+          cells={cells}
         />
       </div>
     </div>

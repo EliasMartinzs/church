@@ -25,82 +25,84 @@ export type Member = {
   cellName: string | undefined;
 };
 
+const CellAction: React.FC<{ row: any }> = ({ row }) => {
+  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = (memberId: string) => {
+    startTransition(async () => {
+      // deleteMember(memberId);
+      setOpen(false);
+      window.location.reload();
+    });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="flex flex-col">
+        <DropdownMenuLabel>Ações</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <ReusableDialog
+          trigger={
+            <Button type="button" variant="ghost">
+              Deletar membro
+            </Button>
+          }
+          open={open}
+          setOpen={setOpen}
+          textAlign="center"
+          headerStyle="flex flex-col gap-y-3"
+          title="Excluir Membro Permanentemente"
+          description="Atenção: Ao excluir este membro, todas as informações relacionadas a ele, incluindo reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
+          content={
+            <div className="flex gap-2">
+              <Button
+                size="full"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                size="full"
+                type="button"
+                className="flex gap-x-2"
+                onClick={() => handleDelete(row.original.id)}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" /> Deletando...
+                  </>
+                ) : (
+                  "Deletar"
+                )}
+              </Button>
+            </div>
+          }
+        />
+
+        <Link
+          href={`/secretario/member/${row.original.id}`}
+          className={cn(buttonVariants({ variant: "ghost" }))}
+        >
+          Sobre o Membro
+        </Link>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "actions",
     header: "Ações",
-    cell: ({ row }) => {
-      const [open, setOpen] = useState(false);
-      const [isPending, startTransition] = useTransition();
-
-      const handleDelete = (memberId: string) => {
-        startTransition(async () => {
-          deleteMember(memberId);
-          setOpen(false);
-          window.location.reload();
-        });
-      };
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="flex flex-col">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <ReusableDialog
-              trigger={
-                <Button type="button" variant="ghost">
-                  Deletar membro
-                </Button>
-              }
-              open={open}
-              setOpen={setOpen}
-              textAlign="center"
-              headerStyle="flex flex-col gap-y-3"
-              title="Excluir Membro Permanentemente"
-              description="Atenção: Ao excluir este membro, todas as informações relacionadas a ele, incluindo reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
-              content={
-                <div className="flex gap-2">
-                  <Button
-                    size="full"
-                    variant="outline"
-                    onClick={() => setOpen(false)}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    size="full"
-                    type="button"
-                    className="flex gap-x-2"
-                    onClick={() => handleDelete(row.original.id)}
-                  >
-                    {isPending ? (
-                      <>
-                        <Loader2 className="size-4 animate-spin" /> Deletando...
-                      </>
-                    ) : (
-                      "Deletar"
-                    )}
-                  </Button>
-                </div>
-              }
-            />
-
-            <Link
-              href={`/secretario/member/${row.original.id}`}
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
-              Sobre o Membro
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <CellAction row={row} />,
   },
   {
     accessorKey: "name",

@@ -21,13 +21,6 @@ import {
 
 export const description = "Um gráfico de pizza com texto";
 
-const initialChartData = [
-  { status: "Pendente", count: 0, fill: "var(--color-pending)" },
-  { status: "Respondido", count: 0, fill: "var(--color-answered)" },
-  { status: "Ignorado", count: 0, fill: "var(--color-ignored)" },
-  { status: "Em Andamento", count: 0, fill: "var(--color-in-progress)" },
-];
-
 const chartConfig = {
   visitors: {
     label: "Requisições",
@@ -61,28 +54,31 @@ type Props = {
 };
 
 export const StatusCountChart = ({ statusCount, percetageIncrease }: Props) => {
-  const chartData = [
-    {
-      status: "Pendente",
-      count: statusCount.PENDING,
-      fill: "var(--color-pending)",
-    },
-    {
-      status: "Respondido",
-      count: statusCount.ANSWERED,
-      fill: "var(--color-answered)",
-    },
-    {
-      status: "Ignorado",
-      count: statusCount.IGNORED,
-      fill: "var(--color-ignored)",
-    },
-    {
-      status: "Em Andamento",
-      count: statusCount.IN_PROGRESS,
-      fill: "var(--color-in-progress)",
-    },
-  ];
+  const chartData = React.useMemo(
+    () => [
+      {
+        status: "Pendente",
+        count: statusCount.PENDING,
+        fill: "var(--color-pending)",
+      },
+      {
+        status: "Respondido",
+        count: statusCount.ANSWERED,
+        fill: "var(--color-answered)",
+      },
+      {
+        status: "Ignorado",
+        count: statusCount.IGNORED,
+        fill: "var(--color-ignored)",
+      },
+      {
+        status: "Em Andamento",
+        count: statusCount.IN_PROGRESS,
+        fill: "var(--color-in-progress)",
+      },
+    ],
+    [statusCount]
+  );
 
   const totalRequests = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.count, 0);
