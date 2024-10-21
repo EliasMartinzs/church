@@ -25,6 +25,7 @@ import { toast } from "sonner";
 type Props = {
   churchId: string;
   redirect: string;
+  cellId: string;
   members:
     | {
         value: string;
@@ -33,7 +34,12 @@ type Props = {
     | undefined;
 };
 
-export const NewPrayerForm = ({ members, churchId, redirect }: Props) => {
+export const NewPrayerForm = ({
+  members,
+  churchId,
+  redirect,
+  cellId,
+}: Props) => {
   const form = useForm<PrayerRequestValidation>({
     resolver: zodResolver(prayerRequestForm),
     defaultValues: {
@@ -44,6 +50,7 @@ export const NewPrayerForm = ({ members, churchId, redirect }: Props) => {
       memberId: "",
       status: "PENDING",
       churchId: churchId,
+      cellId: cellId,
     },
   });
 

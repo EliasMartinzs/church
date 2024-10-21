@@ -15,7 +15,15 @@ import {
 import { SiGithub } from "react-icons/si";
 
 import {
+  FaHands,
+  FaLightbulb,
+  FaBox,
+  FaHeart,
+  FaSeedling,
   FaUsers,
+  FaGlobe,
+  FaUser,
+  FaGratipay,
   FaUserCog,
   FaCalendar,
   FaCommentDots,
@@ -259,6 +267,30 @@ export const prayerTypes = [
   { label: "Pessoal", value: "PERSONAL" },
   { label: "Agradecimento", value: "THANKSGIVING" },
 ];
+
+export const prayerIcons = {
+  HEALING: FaHands, // Cura
+  GUIDANCE: FaLightbulb, // Orientação
+  PROVISION: FaBox, // Suprimento
+  RELATIONSHIPS: FaHeart, // Relacionamentos
+  SPIRITUAL_GROWTH: FaSeedling, // Crescimento Espiritual
+  COMMUNITY: FaUsers, // Comunidade
+  WORLD_PEACE: FaGlobe, // Paz Mundial
+  PERSONAL: FaUser, // Pessoal
+  THANKSGIVING: FaGratipay, // Agradecimento
+};
+
+export const prayerNames = {
+  HEALING: "Cura",
+  GUIDANCE: "Orientação",
+  PROVISION: "Suprimento",
+  RELATIONSHIPS: "Relacionamentos",
+  SPIRITUAL_GROWTH: "Crescimento Espiritual",
+  COMMUNITY: "Comunidade",
+  WORLD_PEACE: "Paz Mundial",
+  PERSONAL: "Pessoal",
+  THANKSGIVING: "Agradecimento",
+};
 
 export const prayerStatusOptions = [
   { label: "Pendente", value: "PENDING" },

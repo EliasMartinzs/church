@@ -6,11 +6,12 @@ import { ParticipantCard } from "@/components/admin/participant-card";
 import NotFound from "@/components/global/not-found";
 import { Title } from "@/components/global/title";
 import { MeetingResponse } from "@prisma/client";
-import { Clock, MapPin, Users } from "lucide-react";
+import { Clock, MapPin, Trash2, Users, X } from "lucide-react";
 
 import { DeleteMeeting } from "@/components/admin/delete-meeting";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 
 type Props = {
   params: { meetingId: string };
@@ -82,7 +83,14 @@ export default async function Meeting({ params: { meetingId } }: Props) {
       <div className="w-full lg:w-1/4 border border-red-500 text-red-500 rounded-3xl p-4 flex flex-col gap-y-3">
         <p className="text-lg font-light">Zona de perigo</p>
 
-        <DeleteMeeting meetingId={meetingId} />
+        <DeleteMeeting
+          meetingId={meetingId}
+          trigger={
+            <AlertDialogTrigger className="border w-full p-1 rounded-3xl text-foreground border-muted-foreground">
+              Deletar encontro
+            </AlertDialogTrigger>
+          }
+        />
       </div>
     </div>
   );

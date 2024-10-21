@@ -49,8 +49,8 @@ export const MeetingsChart = ({ data }: Props) => {
 
   return (
     <Card>
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-b mx-5 sm:flex-row text-center">
+        <div className="flex flex-1 flex-col justify-center gap-1">
           <CardTitle>Gráfico dos encontros</CardTitle>
           <CardDescription>
             Exibindo o total de reuniões dos últimos dias
@@ -67,7 +67,7 @@ export const MeetingsChart = ({ data }: Props) => {
                 <button
                   key={chart}
                   data-active={activeChart === chart}
-                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:px-8 sm:py-6"
                   onClick={() => setActiveChart(chart)}
                 >
                   <span className="text-xs text-muted-foreground">
@@ -86,9 +86,6 @@ export const MeetingsChart = ({ data }: Props) => {
       {data.length === 0 ? (
         <div className="w-full py-6 text-center text-muted-foreground font-medium flex flex-col items-center justify-center gap-y-4">
           <p>Nenhum encontro criado até o momento</p>
-          <Link href="/admin/members" className={buttonVariants({})}>
-            Crie um agora
-          </Link>
         </div>
       ) : (
         <CardContent className="px-2 sm:p-6">

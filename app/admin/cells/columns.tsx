@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
 import { ReusableDialog } from "@/components/global/reusable-dialog";
 import { useState, useTransition } from "react";
 import { deleteCell } from "@/actions/admin";
-import { useRouter } from "next/navigation";
 
 export type Secretary = {
   id: string;

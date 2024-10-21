@@ -17,12 +17,14 @@ import { cn } from "@/lib/utils";
 import { ReusableDialog } from "@/components/global/reusable-dialog";
 import { useState, useTransition } from "react";
 import { deleteCell, deleteMember } from "@/actions/admin";
+import { toast } from "sonner";
 
 export type Member = {
   id: string;
   name: string | null;
   memberEmail: string;
   cellName: string | undefined;
+  role: string;
 };
 
 export const columns: ColumnDef<Member>[] = [
@@ -32,10 +34,20 @@ export const columns: ColumnDef<Member>[] = [
     cell: ({ row }) => {
       const [open, setOpen] = useState(false);
       const [isPending, startTransition] = useTransition();
+      const isSecretary = row.original.role === "Secretario";
 
-      const handleDelete = (memberId: string) => {
+      const title = isSecretary
+        ? "Excluir Secretário Permanentemente"
+        : "Excluir Membro Permanentemente";
+
+      const description = isSecretary
+        ? "Atenção: Ao excluir este secretário, todos os membros da célula a que ele pertence também serão deletados, assim como todas as informações relacionadas a ele, incluindo reuniões. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
+        : "Atenção: Ao excluir este membro, todas as informações relacionadas a ele, incluindo reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?";
+
+      const handleDelete = (memberId: string, role: string) => {
         startTransition(async () => {
-          deleteMember(memberId);
+          deleteMember(memberId, role);
+          toast(`${role} deletado com sucesso`);
           setOpen(false);
           window.location.reload();
         });
@@ -55,15 +67,15 @@ export const columns: ColumnDef<Member>[] = [
             <ReusableDialog
               trigger={
                 <Button type="button" variant="ghost">
-                  Deletar membro
+                  {isSecretary ? "Deletar secretario" : "Deletar membro"}
                 </Button>
               }
               open={open}
               setOpen={setOpen}
               textAlign="center"
               headerStyle="flex flex-col gap-y-3"
-              title="Excluir Membro Permanentemente"
-              description="Atenção: Ao excluir este membro, todas as informações relacionadas a ele, incluindo reuniões, serão permanentemente removidas do sistema. Essa ação não pode ser desfeita. Tem certeza de que deseja continuar?"
+              title={title}
+              description={description}
               content={
                 <div className="flex gap-2">
                   <Button
@@ -77,7 +89,9 @@ export const columns: ColumnDef<Member>[] = [
                     size="full"
                     type="button"
                     className="flex gap-x-2"
-                    onClick={() => handleDelete(row.original.id)}
+                    onClick={() =>
+                      handleDelete(row.original.id, row.original.role)
+                    }
                   >
                     {isPending ? (
                       <>
@@ -95,7 +109,7 @@ export const columns: ColumnDef<Member>[] = [
               href={`/admin/member/${row.original.id}`}
               className={cn(buttonVariants({ variant: "ghost" }))}
             >
-              Sobre o Membro
+              {isSecretary ? "Sobre o secretario" : "Sobre o membro"}
             </Link>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -125,5 +139,9 @@ export const columns: ColumnDef<Member>[] = [
     header: ({ column }) => {
       return <Button variant="ghost">Email</Button>;
     },
+  },
+  {
+    accessorKey: "role",
+    header: "Cargo",
   },
 ];

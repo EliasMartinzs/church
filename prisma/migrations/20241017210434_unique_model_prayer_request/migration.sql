@@ -161,6 +161,7 @@ CREATE TABLE "PrayerStatistics" (
     "totalRequests" INTEGER NOT NULL DEFAULT 0,
     "answered" INTEGER NOT NULL DEFAULT 0,
     "notAnswered" INTEGER NOT NULL DEFAULT 0,
+    "churchId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -184,6 +185,12 @@ CREATE UNIQUE INDEX "Church_churchStatiticsId_key" ON "Church"("churchStatiticsI
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cell_secretaryId_key" ON "Cell"("secretaryId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PrayerRequest_churchId_key" ON "PrayerRequest"("churchId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PrayerStatistics_churchId_key" ON "PrayerStatistics"("churchId");
 
 -- AddForeignKey
 ALTER TABLE "Secretary" ADD CONSTRAINT "Secretary_churchId_fkey" FOREIGN KEY ("churchId") REFERENCES "Church"("id") ON DELETE SET NULL ON UPDATE CASCADE;

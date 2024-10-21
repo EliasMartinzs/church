@@ -119,7 +119,7 @@ export const createNewUserForm = z
       message: "E-mail é obrigatório",
     }),
     password: z.string().min(6, {
-      message: "Senha é obrigatório",
+      message: "Senha é obrigatório, No minimo 6 caracteres",
     }),
     confirmPassword: z.string().min(6, {
       message: "Confirmação de senha é obrigatória",
@@ -179,6 +179,7 @@ export const prayerRequestForm = z.object({
     message: "Por favor, Insira um membro valido",
   }),
   churchId: z.string(),
+  cellId: z.string(),
 });
 
 export type PrayerRequestValidation = z.infer<typeof prayerRequestForm>;

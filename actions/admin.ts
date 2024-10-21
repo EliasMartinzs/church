@@ -177,85 +177,34 @@ export const createNewSecretary = async (
 ) => {
   const hashedPassword = await bcrypt.hash(values?.password, 10);
 
-  const newUser = await clerkClient().users.createUser({
-    firstName: values?.fullname,
-    emailAddress: [values?.email],
-    password: hashedPassword,
-    publicMetadata: {
-      role: values.role,
-    },
-    privateMetadata: {
-      churchId: values.churchId,
-    },
-  });
-
-  if (!newUser || !newUser?.id) {
-    throw new Error("Erro ao criar usuario");
-  }
-
-  if (values.role === "SECRETARY") {
-    await prisma.secretary.create({
-      data: {
-        id: newUser.id,
-        email: values.email,
-        fullName: values.fullname,
-        role: "SECRETARY",
-        churchId: values.churchId as string,
+  try {
+    const newUser = await clerkClient().users.createUser({
+      firstName: values?.fullname,
+      emailAddress: [values?.email],
+      password: hashedPassword,
+      publicMetadata: {
+        role: values.role,
       },
-    });
-  }
-
-  const churchStatistics = await prisma.churchStatistics.findFirst({
-    where: {
-      church: {
-        id: values.churchId,
-      },
-    },
-  });
-
-  await prisma.churchStatistics.update({
-    where: {
-      id: churchStatistics?.id!,
-    },
-    data: {
-      totalMembers: {
-        increment: 1,
-      },
-    },
-  });
-};
-
-export const createNewUser = async (values: createNewUserValidation) => {
-  const hashedPassword = await bcrypt.hash(values?.password, 10);
-
-  const newUser = await clerkClient().users.createUser({
-    firstName: values?.fullname,
-    emailAddress: [values?.email],
-    password: hashedPassword,
-    publicMetadata: {
-      role: values.role,
-    },
-    privateMetadata: {
-      churchId: values.churchId,
-    },
-  });
-
-  if (!newUser || !newUser?.id) {
-    throw new Error("Erro ao criar usuario");
-  }
-
-  if (values.role === "MEMBER") {
-    await prisma.member.create({
-      data: {
-        id: newUser.id,
-        email: values.email,
-        fullName: values.fullname,
-        role: "MEMBER",
+      privateMetadata: {
         churchId: values.churchId,
-        cellId: values.cellId,
-        photoUrl: "/noAvatar.png",
       },
     });
+
+    if (!newUser || !newUser?.id) {
+      throw new Error("Erro ao criar usuário");
+    }
+
+    if (values.role === "SECRETARY") {
+      await prisma.secretary.create({
+        data: {
+          id: newUser.id,
+          email: values.email,
+          fullName: values.fullname,
+          role: "SECRETARY",
+          churchId: values.churchId as string,
+        },
+      });
+    }
 
     const churchStatistics = await prisma.churchStatistics.findFirst({
       where: {
@@ -275,6 +224,81 @@ export const createNewUser = async (values: createNewUserValidation) => {
         },
       },
     });
+  } catch (error: any) {
+    if (error?.statusCode === 422) {
+      const errorMessage =
+        error?.errors?.[0]?.message || "E-mail já está em uso.";
+      return { success: false, message: errorMessage };
+    } else {
+      return {
+        success: false,
+        message:
+          "Este e-mail já está cadastrado. Tente fazer login ou use outro endereço de e-mail.",
+      };
+    }
+  }
+};
+
+export const createNewUser = async (values: createNewUserValidation) => {
+  try {
+    const hashedPassword = await bcrypt.hash(values?.password, 10);
+
+    const newUser = await clerkClient().users.createUser({
+      firstName: values?.fullname,
+      emailAddress: [values?.email],
+      password: hashedPassword,
+      publicMetadata: {
+        role: values.role,
+      },
+      privateMetadata: {
+        churchId: values.churchId,
+      },
+    });
+
+    if (values.role === "MEMBER") {
+      await prisma.member.create({
+        data: {
+          id: newUser.id,
+          email: values.email,
+          fullName: values.fullname,
+          role: "MEMBER",
+          churchId: values.churchId,
+          cellId: values.cellId,
+          photoUrl: "/noAvatar.png",
+        },
+      });
+
+      const churchStatistics = await prisma.churchStatistics.findFirst({
+        where: {
+          church: {
+            id: values.churchId,
+          },
+        },
+      });
+
+      await prisma.churchStatistics.update({
+        where: {
+          id: churchStatistics?.id!,
+        },
+        data: {
+          totalMembers: {
+            increment: 1,
+          },
+        },
+      });
+    }
+  } catch (error: any) {
+    if (error?.statusCode === 422) {
+      const errorMessage =
+        error?.errors?.[0]?.message || "E-mail já está em uso.";
+      return { success: false, message: errorMessage };
+    } else {
+      return {
+        success: false,
+        message:
+          "Este e-mail já está cadastrado. Tente fazer login ou use outro endereço de e-mail.",
+      };
+    }
   }
 };
 
@@ -387,15 +411,69 @@ export const getMemberById = async (id: string) => {
   }
 };
 
-export const deleteMember = async (memberId: string) => {
+export const getSecretaryById = async (id: string) => {
   try {
-    return await prisma.member.delete({
+    return await prisma.secretary.findFirst({
       where: {
-        id: memberId,
+        id: id,
+      },
+      include: {
+        cell: {},
+        church: true,
       },
     });
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const deleteMember = async (id: string, role: string) => {
+  try {
+    let deletedUser: any;
+
+    if (role === "Secretario") {
+      deletedUser = await prisma.secretary.delete({
+        where: { id },
+        select: { churchId: true },
+      });
+    } else if (role === "Membro") {
+      deletedUser = await prisma.member.delete({
+        where: { id },
+        select: { churchId: true },
+      });
+    }
+
+    const churchId = deletedUser?.churchId;
+
+    if (churchId) {
+      const churchStatistics = await prisma.churchStatistics.findFirst({
+        where: {
+          church: {
+            id: churchId,
+          },
+        },
+      });
+
+      if (churchStatistics) {
+        await prisma.churchStatistics.update({
+          where: {
+            id: churchStatistics.id,
+          },
+          data: {
+            totalMembers: {
+              decrement: 1,
+            },
+            ...(role === "Secretario" && {
+              totalCells: {
+                decrement: 1,
+              },
+            }),
+          },
+        });
+      }
+    }
+  } catch (error: any) {
+    throw new Error(`Erro ao deletar o usuário: ${error.message}`);
   }
 };
 
@@ -539,4 +617,68 @@ export const getParticipationData = async () => {
   } catch (error: any) {
     throw new Error(error);
   }
+};
+
+export const getCellsWithMemberCount = async () => {
+  const user = await getAdmin();
+
+  if (!user) {
+    redirect("sign-in");
+  }
+
+  try {
+    const cellsWithMemberCount = await prisma.cell.findMany({
+      where: {
+        churchId: user?.church?.id,
+      },
+      select: {
+        name: true,
+        _count: {
+          select: {
+            members: true,
+          },
+        },
+      },
+    });
+
+    return cellsWithMemberCount.map((cell) => ({
+      cellName: cell.name,
+      totalMembers: cell._count.members,
+    }));
+  } catch (error: any) {}
+};
+
+export const getPrayersByCells = async () => {
+  const user = await getAdmin();
+
+  if (!user) {
+    redirect("sign-in");
+  }
+
+  try {
+    const prayerByCells = await prisma.prayerRequest.groupBy({
+      by: ["cellId"],
+      _count: {
+        id: true,
+      },
+    });
+
+    const statistic = await Promise.all(
+      prayerByCells.map(async (prayer) => {
+        const cell = await prisma.cell.findUnique({
+          where: {
+            id: prayer.cellId!,
+          },
+          select: { name: true },
+        });
+
+        return {
+          cellName: cell?.name,
+          totalPrayer: prayer._count.id,
+        };
+      })
+    );
+
+    return statistic;
+  } catch (error) {}
 };

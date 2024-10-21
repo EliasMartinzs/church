@@ -7,18 +7,14 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import Link from "next/link";
-import { buttonVariants } from "../ui/button";
 
 type Props = {
   data: { members: number; fill: string }[];
@@ -26,22 +22,24 @@ type Props = {
 
 const chartConfig = {
   members: {
-    label: "Members",
+    label: "Total",
   },
 };
 
 export const TotalMembersChart = ({ data }: Props) => {
   const totalMembers = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + curr.members - 1, 0);
+    return data.reduce((acc, curr) => acc + curr.members, 0);
   }, [data]);
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Total de membros</CardTitle>
-        <CardDescription>Distribuição dos membros</CardDescription>
+      <CardHeader className="items-center text-center border-b border-muted-foreground mx-5">
+        <CardTitle>Membros e Secretários</CardTitle>
+        <CardDescription>
+          Quantidade total de membros e secretários da sua igreja
+        </CardDescription>
       </CardHeader>
-      {data.length === 0 ? (
+      {data[0].members === 0 ? (
         <div className="w-full py-6 text-center text-muted-foreground font-medium flex flex-col items-center justify-center gap-y-4">
           <p>Nenhum membro criado até o momento</p>
         </div>
@@ -85,7 +83,7 @@ export const TotalMembersChart = ({ data }: Props) => {
                             y={(viewBox.cy || 0) + 24}
                             className="fill-muted-foreground"
                           >
-                            Membros
+                            Total
                           </tspan>
                         </text>
                       );

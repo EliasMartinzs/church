@@ -31,6 +31,7 @@ export const NotificationUser = ({ isCompleted, href, profile }: Props) => {
         <>
           <div className="fixed left-[50%] top-[50%] z-40 w-full h-svh bg-black/80 translate-x-[-50%] translate-y-[-50%] overflow-hidden" />
           <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-sm mx-auto translate-x-[-50%] translate-y-[-50%] bg-card p-8 rounded-2xl gap-y-3 shadow-3xl">
+            <h4 className="text-center text-4xl">Bem vindo(a)!</h4>
             <h4 className="text-center text-xl">
               Complete seu perfil para aproveitar todos os recursos!
             </h4>

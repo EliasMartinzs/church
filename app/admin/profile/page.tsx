@@ -1,5 +1,4 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DivWrapper } from "@/components/global/div-wrapper";
 import { Title } from "@/components/global/title";
 import { getAdmin } from "@/actions/admin";
 import { EditProfile } from "@/components/admin/edit-profile";
@@ -10,7 +9,7 @@ export default async function Profile() {
   const user = await getAdmin();
 
   return (
-    <DivWrapper>
+    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
       <Title text="Configurações" />
       <div>
         <Tabs defaultValue="profile" className="">
@@ -26,6 +25,6 @@ export default async function Profile() {
           </TabsContent>
         </Tabs>
       </div>
-    </DivWrapper>
+    </div>
   );
 }

@@ -41,20 +41,25 @@ export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const isLoading = isPending || form.formState.isLoading;
+  const [error, setError] = useState<string>("");
 
   const onSubmit = async (values: createNewUserValidation) => {
     startTransition(async () => {
-      await createNewUser(values);
+      const res = await createNewUser(values);
+      if (res?.success === false) {
+        setError(res.message);
+        return;
+      }
       router.push("/admin/members");
       toast("Novo membro cadastrado com sucesso!");
       revalidatePath("/admin/members");
     });
 
-    sendEmail({
-      email: values.email as string,
-      password: values.password as string,
-      from_name: values.fullname as string,
-    });
+    // sendEmail({
+    //   email: values.email as string,
+    //   password: values.password as string,
+    //   from_name: values.fullname as string,
+    // });
   };
 
   const data = cells?.map((cell) => ({
@@ -91,7 +96,7 @@ export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
               <FormControl>
                 <Input {...field} placeholder="aaaa@gmail.com" type="email" />
               </FormControl>
-              <small>{form.formState.errors.email?.message}</small>
+              <small>{form.formState.errors.email?.message || error}</small>
             </FormItem>
           )}
         />

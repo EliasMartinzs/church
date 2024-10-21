@@ -44,20 +44,26 @@ export const NewSecretaryForm = ({ churchId, userId }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const isLoading = isPending || form.formState.isLoading;
+  const [error, setError] = useState<string>("");
 
   const onSubmit = async (values: CreateNewSecretaryValidation) => {
     startTransition(async () => {
-      await createNewSecretary(values);
+      const res = await createNewSecretary(values);
+
+      if (res?.success === false) {
+        setError(res.message);
+        return;
+      }
       toast("Novo secretario cadastrado com sucesso!");
       router.push("/admin/cell/create");
       revalidatePath("/admin/cells");
     });
 
-    sendEmail({
-      email: values.email as string,
-      password: values.password as string,
-      from_name: values.fullname as string,
-    });
+    // sendEmail({
+    //   email: values.email as string,
+    //   password: values.password as string,
+    //   from_name: values.fullname as string,
+    // });
   };
 
   return (
@@ -89,7 +95,7 @@ export const NewSecretaryForm = ({ churchId, userId }: Props) => {
               <FormControl>
                 <Input {...field} placeholder="aaaa@gmail.com" type="email" />
               </FormControl>
-              <small>{form.formState.errors.email?.message}</small>
+              <small>{form.formState.errors.email?.message || error}</small>
             </FormItem>
           )}
         />

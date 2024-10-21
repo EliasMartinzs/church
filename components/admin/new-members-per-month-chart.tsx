@@ -37,9 +37,9 @@ const chartConfig = {
 export function NewMembersPerMonthChart({ data }: Props) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-center">Novos Membros por Mês</CardTitle>
-        <CardDescription className="text-center">
+      <CardHeader className="items-center text-center border-b border-muted-foreground mx-5">
+        <CardTitle>Novos Membros por Mês</CardTitle>
+        <CardDescription>
           Acompanhe o crescimento da sua comunidade ao longo dos meses.
         </CardDescription>
       </CardHeader>

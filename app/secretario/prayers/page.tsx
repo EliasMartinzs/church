@@ -1,4 +1,8 @@
-import { getAllPrayerRequestsByStatus } from "@/actions/global";
+import {
+  getAllPrayerRequestsByStatus,
+  getPrayerRequestIncreasePercentage,
+  getPrayerRequestStatusByCell,
+} from "@/actions/global";
 import { PrayerRequestCard } from "@/components/global/prayer-requests-card";
 import { RedirectButton } from "@/components/global/redirect-button";
 import { Title } from "@/components/global/title";
@@ -6,10 +10,20 @@ import { PiHandsPrayingFill } from "react-icons/pi";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { getSecretary } from "@/actions/secretary";
+import { StatusCountChart } from "@/components/global/status-count-";
 
 export default async function PrayersPage() {
-  const { all, inProgress, pending, answered } =
-    await getAllPrayerRequestsByStatus();
+  const secretary = await getSecretary();
+
+  const [prayerStatus, countStatusRequest, percetageIncrease] =
+    await Promise.all([
+      getAllPrayerRequestsByStatus(),
+      getPrayerRequestStatusByCell(secretary?.cell?.id!),
+      getPrayerRequestIncreasePercentage(secretary?.cell?.id!),
+    ]);
+
+  const { all, answered, inProgress, pending } = prayerStatus;
 
   return (
     <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
@@ -19,7 +33,14 @@ export default async function PrayersPage() {
         <RedirectButton
           icon={PiHandsPrayingFill}
           name="Nova oração"
-          href="/admin/prayer/create"
+          href="/secretario/prayer/create"
+        />
+      </div>
+
+      <div>
+        <StatusCountChart
+          statusCount={countStatusRequest}
+          percetageIncrease={percetageIncrease}
         />
       </div>
 
@@ -52,7 +73,7 @@ export default async function PrayersPage() {
             className={cn(
               all.length === 0
                 ? "flex"
-                : "grid grid-cols-2 lg:grid-cols-4 gap-2"
+                : "grid grid-cols-1 lg:grid-cols-4 gap-2"
             )}
           >
             {all.length === 0 ? (
@@ -75,7 +96,7 @@ export default async function PrayersPage() {
             className={cn(
               inProgress.length === 0
                 ? "flex"
-                : "grid grid-cols-2 lg:grid-cols-4 gap-2"
+                : "grid grid-cols-1 lg:grid-cols-4 gap-2"
             )}
           >
             {inProgress.length === 0 ? (
@@ -98,7 +119,7 @@ export default async function PrayersPage() {
             className={cn(
               pending.length === 0
                 ? "flex"
-                : "grid grid-cols-2 lg:grid-cols-4 gap-2"
+                : "grid grid-cols-1 lg:grid-cols-4 gap-2"
             )}
           >
             {pending.length === 0 ? (
@@ -121,7 +142,7 @@ export default async function PrayersPage() {
             className={cn(
               answered.length === 0
                 ? "flex"
-                : "grid grid-cols-2 lg:grid-cols-4 gap-2"
+                : "grid grid-cols-1 lg:grid-cols-4 gap-2"
             )}
           >
             {answered.length === 0 ? (

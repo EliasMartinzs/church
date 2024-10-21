@@ -5,14 +5,27 @@ import { DataTable } from "@/app/admin/members/data-table";
 async function getData() {
   const data = await getChurch();
 
-  const members: Member[] = data?.members.map((member) => ({
-    id: member.id,
-    name: member.fullName,
-    memberEmail: member.email,
-    cellName: member.cell?.name,
-  })) as Member[];
+  const members =
+    data?.members.map((member) => ({
+      id: member.id,
+      name: member.fullName,
+      memberEmail: member.email,
+      cellName: member.cell?.name,
+      role: "Membro",
+    })) || [];
 
-  return members;
+  const secretaries =
+    data?.secretaries.map((secretary) => ({
+      id: secretary.id,
+      name: secretary.fullName,
+      memberEmail: secretary.email,
+      cellName: secretary.cell?.name || "Sem célula",
+      role: "Secretario",
+    })) || [];
+
+  const combinedArray = [...members, ...secretaries];
+
+  return combinedArray;
 }
 
 export const TableMembers = async () => {
