@@ -49,29 +49,22 @@ export const GridLayoutChart = ({
   prayersByCells,
 }: Props) => {
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-        <TotalCellsChart data={cellsWithMemberCount!} />
-        <TotalMembersChart
-          data={[
-            {
-              members: members?.totalMembers!,
-              fill: "hsl(var(--chart-1))",
-            },
-          ]}
-        />
-        <TotalPrayerByCellsChart data={prayersByCells!} />
-        <NewMembersPerMonthChart data={membersPerMonth} />
-      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      <TotalCellsChart data={cellsWithMemberCount!} />
+      <TotalMembersChart
+        data={[
+          {
+            members: members?.totalMembers!,
+            fill: "hsl(var(--chart-1))",
+          },
+        ]}
+      />
+      <TotalPrayerByCellsChart data={prayersByCells!} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-1 lg:row-span-2 h-full">
-          <AttendaceStatusChart data={attendanceStatus} />
-        </div>
-        <div className="lg:col-span-3">
-          <MeetingsChart data={meetingsPerDay} />
-        </div>
-      </div>
+      <NewMembersPerMonthChart data={membersPerMonth} />
+
+      <AttendaceStatusChart data={attendanceStatus} />
+      <MeetingsChart data={meetingsPerDay} />
     </div>
   );
 };
