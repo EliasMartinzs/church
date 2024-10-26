@@ -26,10 +26,10 @@ export default async function PayerCreatePage() {
   const { members, churchId, cells } = await getData();
 
   return (
-    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
-      <Title href="/admin/prayers" text="Oracoes" />
+    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
+      <div className="w-full lg:max-w-4xl lg:mx-auto lg:p-8 card space-y-4">
+        <Title href="/admin/prayers" text="Orações" />
 
-      <div className="w-full">
         <NewPrayerForm
           members={members}
           redirect="/admin/prayers"

@@ -67,13 +67,6 @@ export const CustomCalendar: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h4 className="text-lg font-semibold capitalize">
-        {currentDate.toLocaleDateString("pt-BR", {
-          month: "long",
-          year: "numeric",
-        })}
-      </h4>
-
       <Swiper
         ref={swiperRef}
         navigation={{

@@ -17,18 +17,26 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 type Props = {
   meeting: MeetingWithParticipants;
   href: string;
+  profile: "admin" | "secretario" | "member";
+  text: string;
+  action: (formData: FormData) => Promise<void>;
+  toastMessage?: string;
 };
 
 export const MeetingCard = async ({
   meeting: { endTime, location, title, date, participants, startTime, id },
   href,
+  profile,
+  text,
+  action,
+  toastMessage,
 }: Props) => {
   const participantsConfirmed = await getAllParticipantsConfirmedMeetingByIds(
     participants
   );
 
   return (
-    <div className="max-lg:w-full lg:w-[896px] lg:max-w-3xl bg-accent lg:bg-background p-6 lg:p-8 flex items-center max-lg:justify-between gap-x-6 text-sm lg:gap-x-14 rounded-2xl transition-transform duration-300 ease-in-out overflow-hidden relative group">
+    <div className="max-lg:w-full lg:w-[896px] lg:max-w-3xl card p-6 lg:p-8 flex items-center max-lg:justify-between gap-x-6 text-sm lg:gap-x-14 rounded-2xl transition-transform duration-300 ease-in-out overflow-hidden relative group">
       <div className="flex flex-col items-center flex-1">
         <h5 className="font-semibold text-2xl">
           {getMonthName(date?.getMonth() + 1).slice(0, 3)}
@@ -83,10 +91,10 @@ export const MeetingCard = async ({
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-accent lg:bg-background p-6 rounded-2xl transform -translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0">
+      <div className="absolute inset-0 card p-6 rounded-2xl transform -translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0">
         <div className="w-full h-full flex flex-1 items-center justify-center gap-x-10">
           <Link
-            href={`${href}${id}`}
+            href={href}
             className={cn(
               "hover:underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors"
             )}
@@ -94,31 +102,36 @@ export const MeetingCard = async ({
             Detalhes do encontro
           </Link>
 
-          <form action={finalizeMeeting}>
+          <form action={action}>
             <input type="hidden" value={id} name="meetingId" />
-            <button type="submit">
-              <ReusableTooltip
-                text="Concluir encontro"
-                icon={
-                  <MdDone className="size-7 cursor-pointer hover:underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors" />
-                }
-              />
-            </button>
+
+            <ReusableTooltip
+              text={text}
+              toastMessage={toastMessage}
+              icon={
+                <MdDone
+                  type="submit"
+                  className="size-7 cursor-pointer hover:underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors"
+                />
+              }
+            />
           </form>
 
-          <DeleteMeeting
-            meetingId={id}
-            trigger={
-              <AlertDialogTrigger>
-                <ReusableTooltip
-                  icon={
-                    <IoTrashBinOutline className="size-7 cursor-pointer hover:underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors" />
-                  }
-                  text="Encontro encerrado"
-                />
-              </AlertDialogTrigger>
-            }
-          />
+          {profile !== "member" && (
+            <DeleteMeeting
+              meetingId={id}
+              trigger={
+                <AlertDialogTrigger>
+                  <ReusableTooltip
+                    icon={
+                      <IoTrashBinOutline className="size-7 cursor-pointer hover:underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors" />
+                    }
+                    text="Encontro encerrado"
+                  />
+                </AlertDialogTrigger>
+              }
+            />
+          )}
         </div>
       </div>
     </div>

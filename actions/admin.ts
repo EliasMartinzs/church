@@ -682,3 +682,121 @@ export const getPrayersByCells = async () => {
     return statistic;
   } catch (error) {}
 };
+
+export const getAllSecretaryByChurch = async () => {
+  const user = await getAdmin();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  try {
+    return await prisma.secretary.findMany({
+      where: {
+        churchId: user?.church?.id,
+      },
+      include: {
+        cell: true,
+        church: true,
+      },
+      orderBy: {
+        fullName: {
+          sort: "asc",
+        },
+      },
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const getUpcomingMeetings = async () => {
+  const user = await getAdmin();
+
+  const now = new Date();
+  const nextWeekDate = new Date(now);
+  nextWeekDate.setDate(now.getDate() + 7);
+
+  try {
+    return await prisma.meeting.findMany({
+      where: {
+        cell: {
+          churchId: user?.church?.id,
+        },
+        date: {
+          gte: now,
+          lt: nextWeekDate,
+        },
+        status: {
+          not: "CANCELLED",
+        },
+      },
+      include: {
+        participants: true,
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteAccountAdmin = async () => {
+  const user = await getAdmin();
+
+  if (!user) {
+    redirect("sign-in");
+  }
+
+  try {
+    const church = await prisma.church.findFirst({
+      where: {
+        id: user?.church?.id,
+      },
+      include: {
+        members: {
+          select: {
+            id: true,
+          },
+        },
+        secretaries: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    await prisma.churchStatistics.deleteMany({
+      where: {
+        church: {
+          id: user?.church?.id,
+        },
+      },
+    });
+    await prisma.prayerStatistics.deleteMany({
+      where: {
+        churchId: user?.church?.id,
+      },
+    });
+
+    for (const member of church?.members!) {
+      await clerkClient().users.deleteUser(member.id);
+    }
+
+    for (const secretary of church?.secretaries!) {
+      await clerkClient().users.deleteUser(secretary.id);
+    }
+
+    await clerkClient().users.deleteUser(user?.id);
+    await prisma.admin.delete({
+      where: {
+        id: user?.id,
+      },
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};

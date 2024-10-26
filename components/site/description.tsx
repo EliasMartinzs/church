@@ -19,7 +19,7 @@ const Card = ({
   const Icon = icon;
   return (
     <motion.div
-      className={`relative p-4 shadow-3xl rounded-3xl cursor-pointer`}
+      className={`relative p-4 shadow-3xl rounded-3xl cursor-pointer bg-white text-[#242529]`}
       initial={{ opacity: 0, x: invert ? 100 : -100 }}
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8 }}
@@ -39,7 +39,7 @@ const Card = ({
 export const Description = () => {
   return (
     <SectionWrapper className="space-y-6 overflow-hidden">
-      <h4 className="text-3xl lg:text-6xl font-bebas text-center text-black/80">
+      <h4 className="text-3xl lg:text-6xl font-bebas text-center text-white/70">
         Funcionalidades
       </h4>
 

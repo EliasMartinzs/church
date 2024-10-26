@@ -51,23 +51,28 @@ export const EditProfileSecretaryForm = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row lg:gap-x-20 w-full gap-5">
+    <div className="flex flex-col lg:flex-row lg:gap-x-24 w-full gap-5">
       <div>
         <p className="font-medium">Perfil público</p>
-        <small className="text-muted-foreground">
+        <small className="text-muted-foreground whitespace-nowrap">
           Isso será mostrado no seu perfíl.
         </small>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 w-full"
+          className="space-y-8 w-full"
         >
           <FormField
             control={form.control}
             name="fullName"
             render={({ field }) => (
-              <Input className="bg-background lg:w-[400px]" {...field} />
+              <FormItem>
+                <FormLabel>Nome</FormLabel>
+                <FormControl>
+                  <Input className="lg:w-[400px] bg-background" {...field} />
+                </FormControl>
+              </FormItem>
             )}
           />
 
@@ -84,7 +89,7 @@ export const EditProfileSecretaryForm = ({
                     placeholder={field?.value?.toString() || "(00) 00000-0000"}
                     mask="(__) _____-____"
                     replacement="_"
-                    className="flex h-9 w-full bg-transparent border border-input rounded-2xl p-6 text-sm transition-colors file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-9 w-full bg-background border border-input rounded-2xl p-6 text-sm transition-colors file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50 lg:w-[400px]"
                   />
                 </FormControl>
               </FormItem>
@@ -106,7 +111,7 @@ export const EditProfileSecretaryForm = ({
                     placeholder={field?.value?.toString() || "15/06/2000"}
                     mask="__/__/____"
                     replacement="_"
-                    className="flex h-9 w-full bg-transparent border border-input rounded-2xl p-6 text-sm transition-colors file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-9 w-full bg-background border border-input rounded-2xl p-6 text-sm transition-colors file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50 lg:w-[400px]"
                   />
                 </FormControl>
               </FormItem>
@@ -116,7 +121,7 @@ export const EditProfileSecretaryForm = ({
           {!isFormDirty ? (
             <></>
           ) : (
-            <Button size="full">
+            <Button size="lg">
               {!isPending ? (
                 "Salvar"
               ) : (

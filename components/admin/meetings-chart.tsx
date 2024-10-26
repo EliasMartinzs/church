@@ -16,15 +16,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import Link from "next/link";
-import { buttonVariants } from "../ui/button";
 
 export const description = "An interactive bar chart";
 
 const chartConfig = {
   meetings: {
     label: "Encontros",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
@@ -56,31 +54,6 @@ export const MeetingsChart = ({ data }: Props) => {
             Exibindo o total de reuniões dos últimos dias
           </CardDescription>
         </div>
-
-        {data.length === 0 ? (
-          <></>
-        ) : (
-          <div className="flex">
-            {["meetings"].map((key) => {
-              const chart = key as keyof typeof chartConfig;
-              return (
-                <button
-                  key={chart}
-                  data-active={activeChart === chart}
-                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:px-8 sm:py-6"
-                  onClick={() => setActiveChart(chart)}
-                >
-                  <span className="text-xs text-muted-foreground">
-                    {chartConfig[chart].label}
-                  </span>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
-                    {total[key as keyof typeof total].toLocaleString()}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </CardHeader>
 
       {data.length === 0 ? (

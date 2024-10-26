@@ -30,7 +30,6 @@ export const description = "An interactive bar chart";
 const chartConfig = {
   totalPrayer: {
     label: "Oraçoes",
-    color: "hsl(var(--chart-1))",
   },
   label: {
     color: "#fff",
@@ -83,7 +82,7 @@ export const TotalPrayerByCellsChart = ({ data }: Props) => {
               <Bar
                 dataKey="totalPrayer"
                 layout="vertical"
-                fill="var(--color-desktop)"
+                fill="hsl(var(--chart-3))"
                 radius={4}
               >
                 <LabelList

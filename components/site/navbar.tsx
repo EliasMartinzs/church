@@ -1,18 +1,19 @@
 import { MenuMobile } from "@/components/site/menu-mobile";
 import { linksSite } from "@/constants";
-import { Church } from "lucide-react";
 import Link from "next/link";
 import { CiLogin } from "react-icons/ci";
+import { PiChurchThin } from "react-icons/pi";
 
 export const Navbar = () => {
   return (
     <header className="w-full">
-      <nav className="max-lg:w-[90%] mx-auto lg:max-w-5xl bg-foreground text-background backdrop-blur-sm rounded-full py-4 px-8 flex items-center justify-between shadow-3xl">
+      <nav className="max-lg:w-[90%] mx-auto lg:max-w-5xl bg-white text-[#242529] backdrop-blur-sm rounded-full py-4 px-8 flex items-center justify-between shadow-3xl">
         <Link
           href="/"
           className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition-colors hover:scale-110"
         >
-          <Church className="size-8" />
+          <PiChurchThin className="size-8 -mb-4" />
+
           <span>Cramb</span>
         </Link>
         <ul className="max-lg:hidden flex items-center gap-8">

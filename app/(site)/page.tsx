@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 const Home = () => {
   return (
     <main className="w-full min-h-svh relative">
-      <div className="w-full h-[600px] background-site absolute top-0 left-0 -z-50 rotate-180" />
+      <div className="w-full h-[600px] background-site absolute top-0 left-0 -z-50 rotate-180 text-white" />
       <div className="pt-10 lg:pt-20 space-y-20">
         <Navbar />
 

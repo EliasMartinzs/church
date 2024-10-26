@@ -94,25 +94,5 @@ export async function POST(req: Request) {
     }
   }
 
-  if (eventType === "user.deleted") {
-    const user = await clerkClient().users.getUser(evt.data.id!);
-
-    if (user.publicMetadata.role === "secretary") {
-      await prisma.secretary.delete({
-        where: {
-          id: user.id,
-        },
-      });
-    }
-
-    if (user.publicMetadata.role === "member") {
-      await prisma.member.delete({
-        where: {
-          id: user.id,
-        },
-      });
-    }
-  }
-
   return new Response("", { status: 200 });
 }

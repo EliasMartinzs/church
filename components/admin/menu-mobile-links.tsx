@@ -39,13 +39,13 @@ export const MenuMobileLinks = ({ setOpen, menuItems }: Props) => {
             <Icon
               className={cn(
                 "size-6 text-muted-foreground hover:text-blue-500 transition-colors hover:scale-110",
-                pathname === path && "text-foreground"
+                pathname === path && "text-primary"
               )}
             />
             <p
               className={cn(
                 "text-muted-foreground",
-                pathname === path && "text-foreground"
+                pathname === path && "text-primary"
               )}
             >
               {label}

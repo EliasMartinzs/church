@@ -6,14 +6,20 @@ import { PiHandsPrayingFill } from "react-icons/pi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { getAllPrayerRequestsByCell } from "@/actions/secretary";
+import { Cell, Member, PrayerRequest } from "@prisma/client";
+
+interface Prayer extends PrayerRequest {
+  cell?: Cell | null;
+  member: Member;
+}
 
 export default async function PrayersPage() {
   const { all, inProgress, pending, answered } =
     await getAllPrayerRequestsByCell();
 
   return (
-    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
-      <Title href="/admin" text="Oração" />
+    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
+      <Title href="/secretario" text="Oração" />
 
       <div className="flex flex-col gap-3 lg:flex-row">
         <RedirectButton
@@ -65,6 +71,7 @@ export default async function PrayersPage() {
                   key={prayer.id}
                   prayer={prayer}
                   index={index}
+                  profile="admin"
                 />
               ))
             )}
@@ -83,11 +90,12 @@ export default async function PrayersPage() {
                 Nenhuma oração em progresso até o momento!
               </div>
             ) : (
-              inProgress.map((prayer, index) => (
+              inProgress.map((prayer: Prayer, index: number) => (
                 <PrayerRequestCard
                   key={prayer.id}
                   prayer={prayer}
                   index={index}
+                  profile="admin"
                 />
               ))
             )}
@@ -106,11 +114,12 @@ export default async function PrayersPage() {
                 Nenhuma oração pendente até o momento!
               </div>
             ) : (
-              pending.map((prayer, index) => (
+              pending.map((prayer: Prayer, index: number) => (
                 <PrayerRequestCard
                   key={prayer.id}
                   prayer={prayer}
                   index={index}
+                  profile="admin"
                 />
               ))
             )}
@@ -129,11 +138,12 @@ export default async function PrayersPage() {
                 Nenhuma oração respondida até o momento!
               </div>
             ) : (
-              answered.map((prayer, index) => (
+              answered.map((prayer: Prayer, index: number) => (
                 <PrayerRequestCard
                   key={prayer.id}
                   prayer={prayer}
                   index={index}
+                  profile="admin"
                 />
               ))
             )}

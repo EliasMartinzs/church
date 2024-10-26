@@ -48,7 +48,7 @@ export const EditChurchForm = ({ church }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="lg:max-w-xl lg::mr-auto space-y-6 hidden-scrollbar"
+        className="lg:max-w-xl lg::mr-auto space-y-8 hidden-scrollbar"
       >
         <FormField
           control={form.control}

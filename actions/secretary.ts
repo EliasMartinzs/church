@@ -25,9 +25,14 @@ export const getSecretary = async () => {
             meetings: true,
             members: true,
             church: true,
+            prayerRequests: true,
           },
         },
-        church: true,
+        church: {
+          include: {
+            admin: true,
+          },
+        },
       },
     });
   } catch (error: any) {
@@ -122,4 +127,47 @@ export const getAllPrayerRequestsByCell = async () => {
   } catch (error: any) {
     throw new Error(`Failed to fetch prayer requests: ${error.message}`);
   }
+};
+
+export const getNewMembersPerMonthByCell = async () => {
+  const user = await getSecretary();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const members = await prisma.member.groupBy({
+    where: {
+      cellId: user?.cell?.id,
+    },
+    by: ["createdAt"],
+    _count: {
+      id: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  type FormattedData = { month: string; newMembers: number };
+
+  const formattedData = members.reduce<FormattedData[]>(
+    (acc, { createdAt, _count }) => {
+      const month = new Date(createdAt).toLocaleString("pt-BR", {
+        month: "long",
+      });
+
+      const existingMonth = acc.find((entry) => entry.month === month);
+      if (existingMonth) {
+        existingMonth.newMembers += _count.id;
+      } else {
+        acc.push({ month, newMembers: _count.id });
+      }
+
+      return acc;
+    },
+    []
+  );
+
+  return formattedData;
 };

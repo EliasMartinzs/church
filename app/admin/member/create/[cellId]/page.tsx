@@ -19,6 +19,7 @@ export default async function CreateMemberPage({ params: { cellId } }: Props) {
           cellId={cellId}
           churchId={church?.id}
           cells={church?.cells!}
+          href="/admin/members"
         />
       </div>
     </div>

@@ -1,65 +1,69 @@
 import {
   getAdmin,
   getCellsWithMemberCount,
+  getChurch,
   getChurchStatistic,
   getMeetigsPerday,
   getNewMembersPerMonth,
   getParticipationData,
   getPrayersByCells,
+  getUpcomingMeetings,
 } from "@/actions/admin";
 import { NotificationUser } from "@/components/global/notification-user";
 import { GridLayoutChart } from "@/components/admin/grid-layout";
 import { CustomCalendar } from "@/components/global/custom-calendar";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default async function Admin() {
   const [
     admin,
-    members,
+    church,
+    statisticChurch,
     membersPerMonth,
     meetingsPerDay,
     attendanceStatus,
     cellsWithMemberCount,
     prayersByCells,
+    allUpcomingMeetings,
   ] = await Promise.all([
     getAdmin(),
+    getChurch(),
     getChurchStatistic(),
     getNewMembersPerMonth(),
     getMeetigsPerday(),
     getParticipationData(),
     getCellsWithMemberCount(),
     getPrayersByCells(),
+    getUpcomingMeetings(),
   ]);
 
   return (
-    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
+    <div className="relative h-full w-full rounded-2xl flex flex-col">
       <NotificationUser
         href="/admin/profile"
         isCompleted={!admin?.isCompleted}
         profile="admin"
       />
 
-      <h4 className="text-xl mb-4">
-        <span className="font-medium">Bem vindo(a),</span>{" "}
-        {admin?.fullName === null ? (
-          <Link href="/admin/profile" className="underline underline-offset-4">
-            Complete seu perfil para ver seu nome!
-          </Link>
-        ) : (
-          admin?.fullName
-        )}
-      </h4>
+      <div className="p-5 text-2xl font-black max-lg:hidden">
+        {admin?.church?.name}
+      </div>
 
-      <CustomCalendar />
+      <div className={cn("space-y-4 p-5")}>
+        <CustomCalendar />
 
-      <GridLayoutChart
-        attendanceStatus={attendanceStatus}
-        members={members}
-        meetingsPerDay={meetingsPerDay}
-        membersPerMonth={membersPerMonth}
-        cellsWithMemberCount={cellsWithMemberCount}
-        prayersByCells={prayersByCells}
-      />
+        <GridLayoutChart
+          attendanceStatus={attendanceStatus}
+          statisticChurch={statisticChurch}
+          meetingsPerDay={meetingsPerDay}
+          membersPerMonth={membersPerMonth}
+          cellsWithMemberCount={cellsWithMemberCount}
+          prayersByCells={prayersByCells}
+          allSecretaries={church?.secretaries!}
+          allMembers={church?.members!}
+          allUpcommingMeetings={allUpcomingMeetings}
+        />
+      </div>
     </div>
   );
 }

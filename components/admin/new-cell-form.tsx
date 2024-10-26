@@ -32,7 +32,7 @@ export const NewCellForm = ({ churchId, secretaries }: Props) => {
     defaultValues: {
       name: "",
       description: "",
-      photoUrl: "/church.png",
+      photoUrl: "/cell.jpg",
       churchId: churchId,
       secretaryId: "",
     },
@@ -60,10 +60,7 @@ export const NewCellForm = ({ churchId, secretaries }: Props) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 lg:max-w-4xl mr-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="photoUrl"

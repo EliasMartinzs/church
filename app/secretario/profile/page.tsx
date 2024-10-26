@@ -9,7 +9,7 @@ export default async function SecretaryProfile() {
   const user = await getSecretary();
 
   return (
-    <div className="flex flex-1 h-full flex-col max-lg:items-center max-lg:justify-center lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
+    <div className="flex flex-1 h-full flex-col max-lg:items-center max-lg:justify-center card rounded-2xl lg:p-8 gap-y-8">
       <div className="flex flex-col lg:flex-row gap-5">
         <div className="w-52 h-52 relative rounded-lg">
           <EditProfilePic photoUrl={user?.photoUrl || "/noAvatar.png"} />

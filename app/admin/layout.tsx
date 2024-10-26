@@ -3,6 +3,7 @@ import { SidebarDesktop } from "../../components/global/sidebar-desktop";
 import { TopbarDesktop } from "@/components/global/topbar-desktop";
 import { getAdmin } from "@/actions/admin";
 import { menuItemsAdmin } from "@/constants";
+import { Footer } from "@/components/global/footer";
 
 type Props = {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ export default async function LayoutAdmin({ children }: Props) {
       {/* Desktop Layout */}
       <div className="hidden lg:flex flex-1">
         {/* Topbar */}
-        <div className="w-full h-24 fixed top-0 left-0 z-10 bg-background/90 backdrop-blur-sm">
+        <div className="w-full h-24 fixed top-0 left-0 z-10">
           <TopbarDesktop
             fullname={user?.fullName as string}
             hrefProfile="/secretario/profile"
@@ -36,7 +37,7 @@ export default async function LayoutAdmin({ children }: Props) {
       </div>
 
       {/* Mobile Layout */}
-      <div className="lg:hidden flex-1 p-4">
+      <div className="lg:hidden p-4 flex flex-col flex-1">
         <Navbar
           menuItems={menuItemsAdmin}
           fullname={user?.fullName as string}
@@ -44,8 +45,10 @@ export default async function LayoutAdmin({ children }: Props) {
           href="/admin"
           photoUrl={user?.photoUrl as string}
         />
-        {children}
+        <div className="w-full h-full flex flex-1">{children}</div>
       </div>
+
+      <Footer />
     </div>
   );
 }

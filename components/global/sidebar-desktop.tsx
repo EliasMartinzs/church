@@ -37,12 +37,15 @@ export const SidebarDesktop = ({ menuLinks }: Props) => {
           <Link
             key={path}
             href={path}
-            className={cn("p-2 flex items-center gap-x-3")}
+            className={cn(
+              "p-2 flex items-center gap-x-3",
+              pathname === path && "text-primary"
+            )}
           >
             <Icon
               className={cn(
                 "size-7 text-muted-foreground hover:text-foreground transition-colors hover:scale-110",
-                pathname === path && "text-foreground"
+                pathname === path && "text-primary"
               )}
             />
             <span className="whitespace-nowrap">{label}</span>

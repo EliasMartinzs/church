@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { CiSettings, CiUser } from "react-icons/ci";
 import { SignOutButton } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getSecretary } from "@/actions/secretary";
 
 type Props = {
   hrefProfile: string;

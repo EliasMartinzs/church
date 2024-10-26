@@ -4,11 +4,14 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
   SortingState,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { Input } from "@/components/ui/input";
 
 import {
   Table,
@@ -32,23 +35,36 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
     <>
-      <div className="border whitespace-nowrap">
-        <Table>
+      <div className="whitespace-nowrap space-y-4">
+        <Input
+          placeholder="Buscar por nomes..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm rounded-none"
+        />
+
+        <Table className="border">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

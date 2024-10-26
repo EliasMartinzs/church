@@ -19,7 +19,7 @@ type Props = {
   placeholder: string;
   className?: string;
   onChange: (...event: any[]) => void;
-  field: string;
+  field?: string;
   erroMessage: React.ReactNode;
 };
 
@@ -29,7 +29,6 @@ export const ReusableSelect = ({
   className,
   onChange,
   erroMessage,
-  field,
 }: Props) => {
   return (
     <Select
@@ -45,7 +44,7 @@ export const ReusableSelect = ({
           <>{erroMessage}</>
         ) : (
           data?.map(({ label, value }) => (
-            <SelectItem key={value} value={value}>
+            <SelectItem key={value} value={value} className="capitalize">
               {label}
             </SelectItem>
           ))

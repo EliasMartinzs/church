@@ -33,7 +33,7 @@ model Secretary {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   cell        Cell?
-  church      Church?   @relation(fields: [churchId], references: [id])
+  church      Church?   @relation(fields: [churchId], references: [id], onDelete: Cascade)
   churchId    String?
 }
 
@@ -77,7 +77,7 @@ model Cell {
   id             String          @id @default(cuid())
   name           String
   description    String?
-  church         Church          @relation(fields: [churchId], references: [id])
+  church         Church          @relation(fields: [churchId], references: [id], onDelete: Cascade)
   churchId       String
   photoUrl       String?
   members        Member[]
@@ -158,21 +158,21 @@ model PrayerRequest {
   member      Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId    String
   category    PrayerCategory
-  cell        Cell?          @relation(fields: [cellId], references: [id])
-  cellId      String?
   churchId    String
+  cell        Cell?          @relation(fields: [cellId], references: [id], onDelete: Cascade)
+  cellId      String?
 }
 
 enum PrayerCategory {
-  HEALING // Oração por cura física, emocional ou espiritual
-  GUIDANCE // Oração por orientação em decisões e caminhos da vida
-  PROVISION // Oração por suprimento financeiro ou material
-  RELATIONSHIPS // Oração por relacionamentos saudáveis e reconciliações
-  SPIRITUAL_GROWTH // Oração por crescimento e fortalecimento espiritual
-  COMMUNITY // Oração pela comunidade ou igreja
-  WORLD_PEACE // Oração pela paz mundial e por questões sociais
-  PERSONAL // Oração por questões pessoais ou íntimas
-  THANKSGIVING // Agradecimentos a Deus por bênçãos recebidas
+  HEALING
+  GUIDANCE
+  PROVISION
+  RELATIONSHIPS
+  SPIRITUAL_GROWTH
+  COMMUNITY
+  WORLD_PEACE
+  PERSONAL
+  THANKSGIVING
 }
 
 model PrayerStatistics {

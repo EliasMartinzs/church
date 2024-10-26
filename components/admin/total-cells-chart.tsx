@@ -31,7 +31,6 @@ export const description = "An interactive bar chart";
 const chartConfig = {
   totalMembers: {
     label: "Total de Membros",
-    color: "hsl(var(--chart-1))",
   },
   label: {
     color: "#fff",
@@ -84,7 +83,7 @@ export const TotalCellsChart = ({ data }: Props) => {
               <Bar
                 dataKey="totalMembers"
                 layout="vertical"
-                fill="var(--color-desktop)"
+                fill="hsl(var(--chart-1))"
                 radius={4}
               >
                 <LabelList

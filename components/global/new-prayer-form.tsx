@@ -2,7 +2,7 @@
 
 import { prayerRequestForm, PrayerRequestValidation } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -26,12 +26,13 @@ type Props = {
   churchId: string;
   redirect: string;
   cellId?: string;
-  members:
+  members?:
     | {
         value: string;
         label: string;
       }[]
     | undefined;
+  memberId?: string;
   cells?: {
     label: string;
     value: string;
@@ -44,6 +45,7 @@ export const NewPrayerForm = ({
   redirect,
   cellId,
   cells,
+  memberId,
 }: Props) => {
   const form = useForm<PrayerRequestValidation>({
     resolver: zodResolver(prayerRequestForm),
@@ -52,7 +54,7 @@ export const NewPrayerForm = ({
       description: "",
       answeredAt: false,
       category: "COMMUNITY",
-      memberId: "",
+      memberId: memberId || "",
       status: "PENDING",
       churchId: churchId,
       cellId: cellId,
@@ -72,10 +74,7 @@ export const NewPrayerForm = ({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 lg:max-w-4xl mr-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="title"
@@ -111,28 +110,30 @@ export const NewPrayerForm = ({
         />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="memberId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Membro</FormLabel>
-                <FormControl>
-                  <ReusableSelect
-                    data={members!}
-                    erroMessage="Nenhum membro encontrado"
-                    field={field.value}
-                    onChange={field.onChange}
-                    placeholder="Membro"
-                  />
-                </FormControl>
-                <p className="text-sm text-muted-foreground">
-                  Escolha o membro da igreja pelo qual será feita a oração.
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {members && (
+            <FormField
+              control={form.control}
+              name="memberId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Membro</FormLabel>
+                  <FormControl>
+                    <ReusableSelect
+                      data={members!}
+                      erroMessage="Nenhum membro encontrado"
+                      field={field.value}
+                      onChange={field.onChange}
+                      placeholder="Membro"
+                    />
+                  </FormControl>
+                  <p className="text-sm text-muted-foreground">
+                    Escolha o membro da igreja pelo qual será feita a oração.
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}
@@ -158,28 +159,30 @@ export const NewPrayerForm = ({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <FormControl>
-                  <ReusableSelect
-                    data={prayerStatusOptions}
-                    erroMessage="Nenhum status encontrado"
-                    field={field.value}
-                    onChange={field.onChange}
-                    placeholder="Status"
-                  />
-                </FormControl>
-                <p className="text-sm text-muted-foreground">
-                  Escolha o status da oração.
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {!memberId && (
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <ReusableSelect
+                      data={prayerStatusOptions}
+                      erroMessage="Nenhum status encontrado"
+                      field={field.value}
+                      onChange={field.onChange}
+                      placeholder="Status"
+                    />
+                  </FormControl>
+                  <p className="text-sm text-muted-foreground">
+                    Escolha o status da oração.
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         {cellId === undefined && (

@@ -4,18 +4,18 @@ import {
   changeStatusPrayerRequest,
   deletePrayerRequest,
 } from "@/actions/global";
-import React, { useTransition } from "react";
+import { useTransition } from "react";
 import { ReusableTooltip } from "./reusable-tooltip";
 import { MdDone } from "react-icons/md";
 import { IoTimeOutline } from "react-icons/io5";
-import { Loader2, X } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { Loader2, Trash } from "lucide-react";
 
 type Props = {
   id: string;
+  profile: "admin" | "secretary" | "member";
 };
 
-export const ConfirmPrayerStatusRequest = ({ id }: Props) => {
+export const ConfirmPrayerStatusRequest = ({ id, profile }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const answered = async () => {
@@ -42,16 +42,22 @@ export const ConfirmPrayerStatusRequest = ({ id }: Props) => {
         <Loader2 className="size-10 animate-spin" />
       ) : (
         <>
+          {profile !== "member" && (
+            <>
+              <ReusableTooltip
+                icon={<MdDone className="size-10" onClick={answered} />}
+                text="Oração concluida"
+              />
+              <ReusableTooltip
+                icon={
+                  <IoTimeOutline className="size-10" onClick={inProgress} />
+                }
+                text="Oração em progresso"
+              />
+            </>
+          )}
           <ReusableTooltip
-            icon={<MdDone className="size-10" onClick={answered} />}
-            text="Oração concluida"
-          />
-          <ReusableTooltip
-            icon={<IoTimeOutline className="size-10" onClick={inProgress} />}
-            text="Oração em progresso"
-          />
-          <ReusableTooltip
-            icon={<X className="size-10" onClick={deletePrayer} />}
+            icon={<Trash className="size-10" onClick={deletePrayer} />}
             text="Deletar oração"
           />
         </>

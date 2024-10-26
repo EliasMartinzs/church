@@ -154,7 +154,7 @@ export const socialMediaLinks = [
 
 export const footerInfo = {
   year: new Date().getFullYear(),
-  copyrightText: "© [YEAR] Cramb. Todos os direitos reservados.",
+  copyrightText: `© Cramb. Todos os direitos reservados.`,
 };
 
 export const onboardingSteps: {
@@ -253,6 +253,33 @@ export const menuItemsSecretary = [
     label: "Meu Perfil",
     iconName: "FaRegUserCircle",
     path: "/secretario/profile",
+  },
+];
+export const menuItemsMember = [
+  {
+    label: "Célula",
+    iconName: "FiHome",
+    path: "/member",
+  },
+  {
+    label: "Encontros",
+    iconName: "FiCalendar",
+    path: "/member/meetings",
+  },
+  {
+    label: "Membros",
+    iconName: "FiUsers",
+    path: "/member/members",
+  },
+  {
+    label: "Orações",
+    iconName: "PiHandsPrayingFill",
+    path: "/member/prayers",
+  },
+  {
+    label: "Meu Perfil",
+    iconName: "FaRegUserCircle",
+    path: "/member/profile",
   },
 ];
 

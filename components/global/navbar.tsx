@@ -14,8 +14,8 @@ type Props = {
 
 export const Navbar = ({ fullname, photoUrl, email, menuItems }: Props) => {
   return (
-    <header className="w-full mt-2.5 mb-10">
-      <nav className="max-lg:w-[90%] mx-auto lg:max-w-7xl bg-card backdrop-blur-md rounded-full py-4 px-8 flex items-center justify-between shadow-3xl">
+    <header className="w-full mt-2.5 mb-10 card shadow-3xl">
+      <nav className="max-lg:w-[90%] mx-auto lg:max-w-7xl backdrop-blur-md rounded-full py-4 px-8 flex items-center justify-between bg-transparent">
         <Link
           href="/admin"
           className="flex items-center gap-2 cursor-pointer hover:text-muted-foreground transition-colors hover:scale-110"

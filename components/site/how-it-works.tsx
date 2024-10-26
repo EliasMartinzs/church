@@ -38,8 +38,8 @@ const StepItem = ({
 
 export const HowItWorks = () => {
   return (
-    <SectionWrapper className="space-y-6 overflow-hidden">
-      <h4 className="text-3xl lg:text-6xl font-bebas text-center text-black/80">
+    <SectionWrapper className="space-y-6 overflow-hidden ">
+      <h4 className="text-3xl lg:text-6xl font-bebas text-center text-white/70">
         Como Funciona
       </h4>
 

@@ -42,34 +42,45 @@ export const AttendenceRateMemberChart = ({ data }: Props) => {
           Taxa de presença dos membros da célula
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="lg:max-h-96 lg:w-full">
-          <BarChart accessibilityLayer data={data}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="fullName"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.split(" ")[0]}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `${value}%`}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-            <Bar
-              dataKey="attendanceRate"
-              fill="var(--color-attendanceRate)"
-              radius={4}
-            />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
+      {data.length === 0 ? (
+        <p className="mb-12 mt-6 pl-6">
+          Nenhuma presença foi confirmada até o momento. Assim que houver
+          confirmações, exibiremos o gráfico.
+        </p>
+      ) : (
+        <CardContent>
+          <ChartContainer
+            config={chartConfig}
+            className="lg:max-h-96 lg:w-full"
+          >
+            <BarChart accessibilityLayer data={data}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="fullName"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.split(" ")[0]}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dashed" />}
+              />
+              <Bar
+                dataKey="attendanceRate"
+                fill="var(--color-attendanceRate)"
+                radius={4}
+              />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      )}
+
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
           Tendência de presença <TrendingUp className="h-4 w-4" />

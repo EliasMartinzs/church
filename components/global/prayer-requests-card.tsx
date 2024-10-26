@@ -20,19 +20,17 @@ interface Prayer extends PrayerRequest {
 type Props = {
   prayer: Prayer;
   index: number;
+  profile: "admin" | "secretary" | "member";
 };
 
-export const PrayerRequestCard = ({ prayer, index }: Props) => {
+export const PrayerRequestCard = ({ prayer, index, profile }: Props) => {
   const Icon = prayerIcons[prayer.category];
 
   return (
     <div
       key={prayer.id}
       className={cn(
-        "w-full p-4 shadow-3xl rounded-2xl transition-transform duration-300 ease-in-out overflow-hidden relative group",
-        index % 2 === 0
-          ? "bg-accent border border-background"
-          : "bg-background border border-accent"
+        "w-full p-4 shadow-3xl rounded-2xl transition-transform duration-300 ease-in-out overflow-hidden relative group card"
       )}
     >
       <div className="flex flex-col gap-y-4">
@@ -64,8 +62,8 @@ export const PrayerRequestCard = ({ prayer, index }: Props) => {
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-accent lg:bg-background rounded-2xl transform -translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0 flex items-center justify-center">
-        <ConfirmPrayerStatusRequest id={prayer.id} />
+      <div className="absolute inset-0 rounded-2xl transform -translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0 flex items-center justify-center card">
+        <ConfirmPrayerStatusRequest id={prayer.id} profile={profile} />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Title } from "@/components/global/title";
 import { CiCalendar } from "react-icons/ci";
 
 import {
+  finalizeMeeting,
   getMeetingsGroupedByMonth,
   getTodayMeetings,
 } from "@/actions/meetings";
@@ -26,7 +27,7 @@ export default async function MeetingsPage() {
   ]);
 
   return (
-    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
+    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
       <Title text="Encontros" href="/secretario" />
 
       <AttendenceRateMemberChart data={dataChart!} />
@@ -57,6 +58,10 @@ export default async function MeetingsPage() {
                       href="/secretario/meeting/"
                       meeting={meeting}
                       key={meeting.id}
+                      profile="secretario"
+                      text="Concluir encontro"
+                      action={finalizeMeeting}
+                      toastMessage="Encontro encerrado com sucesso"
                     />
                   );
                 })}
@@ -81,6 +86,10 @@ export default async function MeetingsPage() {
                         href="/secretario/meeting/"
                         meeting={meeting}
                         key={meeting.id}
+                        profile="secretario"
+                        text="Concluir encontro"
+                        action={finalizeMeeting}
+                        toastMessage="Encontro encerrado com sucesso"
                       />
                     ))}
                   </div>

@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { $Enums, Meeting, MeetingResponse } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type MeetingWithParticipants = Meeting & {
@@ -342,4 +343,6 @@ export const finalizeMeeting = async (formData: FormData) => {
   for (const response of meetingResponses) {
     await updateAttendanceRateForMember(response.memberId);
   }
+
+  revalidatePath("/secretario/meetings");
 };

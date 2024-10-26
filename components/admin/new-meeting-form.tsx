@@ -38,9 +38,10 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   cellId: string;
+  href: string;
 };
 
-export const NewMeetingForm = ({ cellId }: Props) => {
+export const NewMeetingForm = ({ cellId, href }: Props) => {
   const form = useForm<CreateNewMeetingValidation>({
     resolver: zodResolver(createNewMeetingSchema),
     defaultValues: {
@@ -64,17 +65,14 @@ export const NewMeetingForm = ({ cellId }: Props) => {
   function onSubmit(data: CreateNewMeetingValidation) {
     startTransition(async () => {
       await createNewMeeting(data);
-      router.push(`/admin/cell/${cellId}`);
+      router.push(href);
       toast("Encontro criado com sucesso!");
     });
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 lg:max-w-4xl mr-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="title"

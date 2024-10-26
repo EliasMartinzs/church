@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,8 +15,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import Link from "next/link";
-import { buttonVariants } from "../ui/button";
 
 export const description = "A multiple bar chart";
 
@@ -30,14 +27,13 @@ type Props = {
 const chartConfig = {
   newMembers: {
     label: "Novos Membros",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export function NewMembersPerMonthChart({ data }: Props) {
   return (
     <Card>
-      <CardHeader className="items-center text-center border-b border-muted-foreground mx-5">
+      <CardHeader className="text-start">
         <CardTitle>Novos Membros por Mês</CardTitle>
         <CardDescription>
           Acompanhe o crescimento da sua comunidade ao longo dos meses.
@@ -45,12 +41,15 @@ export function NewMembersPerMonthChart({ data }: Props) {
       </CardHeader>
 
       {data.length === 0 ? (
-        <div className="w-full py-6 text-center text-muted-foreground font-medium flex flex-col items-center justify-center gap-y-4">
+        <div className="w-full p-6">
           <p>Nenhum membro criado até o momento</p>
         </div>
       ) : (
         <CardContent>
-          <ChartContainer config={chartConfig}>
+          <ChartContainer
+            className="lg:max-h-96 lg:w-full"
+            config={chartConfig}
+          >
             <BarChart data={data}>
               <CartesianGrid vertical={false} />
               <XAxis
@@ -64,11 +63,7 @@ export function NewMembersPerMonthChart({ data }: Props) {
                 cursor={false}
                 content={<ChartTooltipContent indicator="dashed" />}
               />
-              <Bar
-                dataKey="newMembers"
-                fill="var(--color-newMembers)"
-                radius={4}
-              />
+              <Bar dataKey="newMembers" fill="hsl(var(--chart-4))" radius={4} />
             </BarChart>
           </ChartContainer>
         </CardContent>

@@ -1,4 +1,5 @@
 import {
+  finalizeMeeting,
   getAllMeetingsOrderedByDate,
   getMeetingsGroupedByMonth,
 } from "@/actions/meetings";
@@ -48,6 +49,10 @@ export const TabMeetingsCell = async ({ cellId }: Props) => {
                     href="/admin/cell/meeting/"
                     meeting={meeting}
                     key={meeting.id}
+                    profile="admin"
+                    text="Concluir encontro"
+                    action={finalizeMeeting}
+                    toastMessage="Encontro finalizad com sucesso!"
                   />
                 ))}
               </div>

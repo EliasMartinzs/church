@@ -21,9 +21,10 @@ type Props = {
   cellId: string | undefined;
   churchId: string | undefined;
   cells?: Cell[];
+  href: string;
 };
 
-export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
+export const NewMemberForm = ({ cellId, churchId, cells, href }: Props) => {
   const [showPassword, setShowPassword] = useState("password");
   const form = useForm<createNewUserValidation>({
     resolver: zodResolver(createNewUserForm),
@@ -50,16 +51,16 @@ export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
         setError(res.message);
         return;
       }
-      router.push("/admin/members");
+      router.push(href);
       toast("Novo membro cadastrado com sucesso!");
-      revalidatePath("/admin/members");
+      revalidatePath(href);
     });
 
-    // sendEmail({
-    //   email: values.email as string,
-    //   password: values.password as string,
-    //   from_name: values.fullname as string,
-    // });
+    sendEmail({
+      email: values.email as string,
+      password: values.password as string,
+      from_name: values.fullname as string,
+    });
   };
 
   const data = cells?.map((cell) => ({
@@ -69,10 +70,7 @@ export const NewMemberForm = ({ cellId, churchId, cells }: Props) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 lg:max-w-4xl mr-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="fullname"

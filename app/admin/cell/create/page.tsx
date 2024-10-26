@@ -26,10 +26,10 @@ export default async function CreateCell() {
   const data = await getData();
 
   return (
-    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
-      <Title href="/admin/cells" text="Nova célula" />
+    <div className="flex flex-1 h-full flex-col rounded-2xl gap-y-8">
+      <div className="w-full lg:max-w-4xl lg:mx-auto lg:p-8 card space-y-4">
+        <Title href="/admin/cells" text="Nova célula" />
 
-      <div className="w-full">
         <NewCellForm
           churchId={data.churchId as string}
           secretaries={data.secretaries!}

@@ -12,11 +12,11 @@ export default async function CreateMeetingPage({ params: { cellId } }: Props) {
   }
 
   return (
-    <div className="flex flex-1 h-full flex-col lg:bg-accent rounded-2xl lg:p-8 gap-y-8">
+    <div className="flex flex-1 h-full flex-col rounded-2xl lg:p-8 card gap-y-8">
       <Title href="/admin/cells" text="Novo encontro" />
 
       <div className="w-full">
-        <NewMeetingForm cellId={cellId} />
+        <NewMeetingForm href="/secretario/meetings" cellId={cellId} />
       </div>
     </div>
   );
