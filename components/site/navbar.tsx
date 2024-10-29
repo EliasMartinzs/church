@@ -8,11 +8,8 @@ export const Navbar = () => {
   return (
     <header className="w-full">
       <nav className="max-lg:w-[90%] mx-auto lg:max-w-5xl bg-white text-[#242529] backdrop-blur-sm rounded-full py-4 px-8 flex items-center justify-between shadow-3xl">
-        <Link
-          href="/"
-          className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition-colors hover:scale-110"
-        >
-          <PiChurchThin className="size-8 -mb-4" />
+        <Link href="/" className="flex items-center gap-x-3">
+          <PiChurchThin className="size-8" />
 
           <span>Cramb</span>
         </Link>
