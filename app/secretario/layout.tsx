@@ -20,7 +20,7 @@ export default async function LayoutSecretary({ children }: Props) {
         <div className="w-full h-24 fixed top-0 left-0 z-10 bg-background/90 backdrop-blur-sm">
           <TopbarDesktop
             fullname={user?.fullName as string}
-            hrefProfile="/secretario/profile"
+            hrefProfile="/member/profile"
             photoUrl={user?.photoUrl as string}
           />
         </div>

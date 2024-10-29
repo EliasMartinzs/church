@@ -20,7 +20,7 @@ export default async function LayoutAdmin({ children }: Props) {
         <div className="w-full h-24 fixed top-0 left-0 z-10">
           <TopbarDesktop
             fullname={user?.fullName as string}
-            hrefProfile="/secretario/profile"
+            hrefProfile="/admin/profile"
             photoUrl={user?.photoUrl as string}
           />
         </div>
